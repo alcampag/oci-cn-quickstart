@@ -89,7 +89,7 @@ module "oke" {
       shape = "VM.Standard.E4.Flex",
       ocpus = 2,
       memory = 16,
-      boot_volume_size = 70,
+      boot_volume_size = 50,
       node_cycling_enabled = false,
       create = true
     }
