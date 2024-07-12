@@ -11,3 +11,8 @@ variable "cni_type" {
 variable "kubernetes_version" {
   default = "v1.29.1"
 }
+
+variable "create_bastion_subnet" {
+  type = bool
+  default = false
+}

@@ -9,7 +9,7 @@ module "oke" {
   create_iam_worker_policy = "never"
   # Network module - VCN
   subnets = {
-    bastion = { create = "always"
+    bastion = { create = var.create_bastion_subnet ? "always" : "never"
                 cidr = "10.0.0.8/29" }
     operator = { create = "never" }
     pub_lb = { cidr = "10.0.0.32/27" }
@@ -20,7 +20,7 @@ module "oke" {
              cidr = "10.0.128.0/18" }
   }
   nsgs = {
-    bastion = {create = "always"}
+    bastion = {create = var.create_bastion_subnet ? "always" : "never"}
     operator = { create = "never"}
     pub_lb = {create = "always"}
     int_lb = {create = "never"}
@@ -89,7 +89,7 @@ module "oke" {
       shape = "VM.Standard.E4.Flex",
       ocpus = 2,
       memory = 16,
-      boot_volume_size = 50,
+      boot_volume_size = 70,
       node_cycling_enabled = false,
       create = true
     }
