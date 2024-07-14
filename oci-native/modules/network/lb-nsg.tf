@@ -103,3 +103,49 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_i
   stateless = true
   description = "LB to pods, OCI Native Ingress - stateless ingress"
 }
+
+resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_http_ingress" {
+  direction                 = "INGRESS"
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  protocol                  = "6"
+  source_type = "CIDR_BLOCK"
+  source = "0.0.0.0/0"
+  stateless = true
+  description = "Allow http traffic - stateless Ingress"
+  tcp_options {
+    destination_port_range {
+      max = 80
+      min = 80
+    }
+  }
+}
+
+resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_http_egress" {
+  direction                 = "EGRESS"
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  protocol                  = "6"
+  destination_type = "CIDR_BLOCK"
+  destination = "0.0.0.0/0"
+  stateless = true
+  description = "Allow http traffic - stateless egress"
+  tcp_options {
+    source_port_range {
+      max = 80
+      min = 80
+    }
+  }
+}
+
+resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker_discovery_egress" {
+  direction                 = "EGRESS"
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  protocol                  = "1"
+  destination_type = "NETWORK_SECURITY_GROUP"
+  destination = module.oke-network.worker_nsg_id
+  stateless = false
+  description = "Allow LB to discover workers"
+  icmp_options {
+    type = 3
+    code = 4
+  }
+}

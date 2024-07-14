@@ -7,7 +7,7 @@ resource "oci_core_subnet" "oke_lb_subnet" {
 
 
 
-resource "oci_load_balancer_load_balancer" "" {
+resource "oci_load_balancer_load_balancer" "oke_lb" {
   compartment_id = var.network_compartment_id
   display_name   = "oke-lb"
   shape          = "flexible"
@@ -17,5 +17,24 @@ resource "oci_load_balancer_load_balancer" "" {
     maximum_bandwidth_in_mbps = 10
     minimum_bandwidth_in_mbps = 10
   }
-  network_security_group_ids = []
+  network_security_group_ids = [oci_core_network_security_group.oke_lb_nsg.id]
+}
+
+resource "oci_load_balancer_rule_set" "oke_lb_redirect_rule" {
+  load_balancer_id = oci_load_balancer_load_balancer.oke_lb.id
+  name             = "https_redirect"
+  items {
+    action = "REDIRECT"
+    description = "Redirect all HTTP traffic to HTTPS"
+    conditions {
+      attribute_name = "PATH"
+      attribute_value = "http://"
+      operator = "PREFIX_MATCH"
+    }
+    redirect_uri {
+      protocol = "HTTPS"
+      port = 443
+    }
+  }
+  count = var.create_lb_https_redirect_rule ? 1 : 0
 }

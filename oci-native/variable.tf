@@ -16,3 +16,7 @@ variable "create_bastion_subnet" {
   type = bool
   default = false
 }
+
+variable "network_compartment_id" {
+  default = null
+}

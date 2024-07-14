@@ -16,7 +16,7 @@ module "oke-network" {
     int_lb = { create = "never" }
     cp = { cidr = "10.0.0.0/29" }
     workers = { cidr = "10.0.8.0/21" }
-    pods = { create = var.cni_type == "npn" ? "always" : "never"
+    pods = { create = "always"
       cidr = "10.0.128.0/18" }
   }
   nsgs = {
@@ -26,7 +26,7 @@ module "oke-network" {
     int_lb = {create = "never"}
     cp = {create = "always"}
     workers = {create = "always"}
-    pods = {create = var.cni_type == "npn" ? "always" : "never"}
+    pods = {create = "always"}
   }
   network_compartment_id = var.network_compartment_id
   assign_dns = true
