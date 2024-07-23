@@ -1,12 +1,12 @@
 resource "oci_core_network_security_group" "oke_lb_nsg" {
   compartment_id = var.network_compartment_id
-  vcn_id         = module.oke-network.vcn_id
+  vcn_id         = oci_core_vcn.spoke_vcn.id
   display_name = "oke-lb-nsg"
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_workers_egress" {
   direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   destination_type = "NETWORK_SECURITY_GROUP"
   destination = module.oke-network.worker_nsg_id
@@ -22,7 +22,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_workers_ingress" {
   direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   source_type = "NETWORK_SECURITY_GROUP"
   source = module.oke-network.worker_nsg_id
@@ -38,7 +38,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_workers_healthcheck_egress" {
   direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   destination_type = "NETWORK_SECURITY_GROUP"
   destination = module.oke-network.worker_nsg_id
@@ -54,7 +54,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_https_ingress" {
   direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   source_type = "CIDR_BLOCK"
   source = "0.0.0.0/0"
@@ -70,7 +70,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_https_
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_https_egress" {
   direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   destination_type = "CIDR_BLOCK"
   destination = "0.0.0.0/0"
@@ -86,7 +86,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_https_
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_egress" {
   direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   destination_type = "NETWORK_SECURITY_GROUP"
   destination = module.oke-network.pod_nsg_id
@@ -96,7 +96,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_e
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_ingress" {
   direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   source_type = "NETWORK_SECURITY_GROUP"
   source = module.oke-network.pod_nsg_id
@@ -104,9 +104,29 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_i
   description = "LB to pods, OCI Native Ingress - stateless ingress"
 }
 
+resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_apigw_egress" {
+  direction                 = "EGRESS"
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
+  protocol                  = "6"
+  destination_type = "NETWORK_SECURITY_GROUP"
+  destination = oci_core_network_security_group.apigw_nsg.id
+  stateless = true
+  description = "Allow egress traffic to the APIGW for responses"
+}
+
+resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_apigw_ingress" {
+  direction                 = "INGRESS"
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
+  protocol                  = "6"
+  source_type = "NETWORK_SECURITY_GROUP"
+  source = oci_core_network_security_group.apigw_nsg.id
+  stateless = true
+  description = "Allow ingress traffic for the APIGW requests"
+}
+
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_http_ingress" {
   direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   source_type = "CIDR_BLOCK"
   source = "0.0.0.0/0"
@@ -122,7 +142,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_http_i
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_http_egress" {
   direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   destination_type = "CIDR_BLOCK"
   destination = "0.0.0.0/0"
@@ -138,7 +158,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_http_e
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker_discovery_egress" {
   direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg
+  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "1"
   destination_type = "NETWORK_SECURITY_GROUP"
   destination = module.oke-network.worker_nsg_id

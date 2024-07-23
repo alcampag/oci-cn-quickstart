@@ -1,0 +1,73 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: native-ic-ingress-class
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+    oci-native-ingress.oraclecloud.com/id: ""
+spec:
+  controller: oci.oraclecloud.com/native-ingress-controller
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testecho1
+  labels:
+    app: testecho1
+spec:
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 75%
+  replicas: 4
+  selector:
+    matchLabels:
+      app: testecho1
+  template:
+    metadata:
+      labels:
+        app: testecho1
+    spec:
+      containers:
+        - name: testecho1
+          image: registry.k8s.io/echoserver:1.4
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testecho1
+spec:
+  selector:
+    app: testecho1
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-readiness
+  annotations:
+    oci-native-ingress.oraclecloud.com/healthcheck-protocol: "HTTP"
+    oci-native-ingress.oraclecloud.com/healthcheck-port: "8080"
+    oci-native-ingress.oraclecloud.com/healthcheck-path: "/api/v1/oke/testecho1"
+    oci-native-ingress.oraclecloud.com/http-listener-port: "80"
+spec:
+  rules:
+    - host: ingress.lb.oke.oraclecloud.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/api/v1/oke/testecho1"
+            backend:
+              service:
+                name: testecho1
+                port:
+                  number: 80
