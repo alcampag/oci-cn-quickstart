@@ -23,3 +23,13 @@ resource "oci_core_network_security_group_security_rule" "apigw_nsg_rule_lb_ingr
   stateless = true
   description = "LBs to APIGW, - stateless ingress"
 }
+
+resource "oci_core_network_security_group_security_rule" "apigw_nsg_rule_bastion_ingress" {
+  direction                 = "INGRESS"
+  network_security_group_id = oci_core_network_security_group.apigw_nsg.id
+  protocol                  = "6"
+  source_type = "CIDR_BLOCK"
+  source = local.bastion_cidr_block
+  stateless = false
+  description = "Rule to allow bastions to reach the API Gateway"
+}

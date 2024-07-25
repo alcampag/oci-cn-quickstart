@@ -42,15 +42,16 @@ resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_ingress_3" 
   network_security_group_id = oci_core_network_security_group.cp_nsg.id
   protocol                  = "6"
   source_type = "CIDR_BLOCK"
-  source = "0.0.0.0/0"
+  source = local.bastion_cidr_block
   stateless = false
-  description = "Allow TCP ingress to kube-apiserver from 0.0.0.0/0"
+  description = "Allow TCP ingress to kube-apiserver from the bastion subnet"
   tcp_options {
     destination_port_range {
       max = 6443
       min = 6443
     }
   }
+  count = var.create_bastion ? 1 : 0
 }
 
 

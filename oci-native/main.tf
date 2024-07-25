@@ -4,7 +4,7 @@ module "network" {
   # TODO: Option to enable LB logging (might require a log group)
   source = "./modules/network"
   network_compartment_id = var.network_compartment_id != null ? var.network_compartment_id : var.compartment_ocid
-  create_bastion_subnet = var.create_bastion_subnet
+  create_bastion = true
   region = var.region
   lb_subnet_private = var.lb_subnet_private
 }

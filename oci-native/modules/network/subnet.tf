@@ -39,13 +39,14 @@ resource "oci_core_subnet" "pods_subnet" {
 }
 
 resource "oci_core_subnet" "bastion_subnet" {
-  cidr_block     = "10.1.0.8/29"
+  cidr_block     = local.bastion_cidr_block
   compartment_id = var.network_compartment_id
   vcn_id         = oci_core_vcn.spoke_vcn.id
   dns_label = "bastion"
   display_name = "bastion-subnet"
-  prohibit_public_ip_on_vnic = true
+  prohibit_public_ip_on_vnic = var.bastion_subnet_private
   route_table_id = oci_core_route_table.service_route_table.id
-  count = var.create_bastion_subnet ? 1 : 0
+  security_list_ids = [oci_core_security_list.bastion_security_list.0.id]
+  count = var.create_bastion ? 1 : 0
 }
 
