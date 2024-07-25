@@ -1,0 +1,4 @@
+auth:
+  region: <region>
+  useWorkloadIdentity: true
+compartment: <compartment>

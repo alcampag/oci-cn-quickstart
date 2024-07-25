@@ -1,5 +1,5 @@
 resource "oci_bastion_bastion" "vcn_spoke_bastion" {
-  bastion_type     = "standard"
+  bastion_type     = "STANDARD"
   compartment_id   = var.network_compartment_id
   target_subnet_id = oci_core_subnet.bastion_subnet.0.id
   name = "bastion-vcn-spoke1"
