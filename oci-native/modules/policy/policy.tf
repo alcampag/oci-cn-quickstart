@@ -1,5 +1,5 @@
 locals {
-  oci_native_ingress_statements = toset([
+  oci_native_ingress_statements = tolist([
     "Allow any-user to manage load-balancers in compartment id ${var.comprtment_id} where all {request.principal.type = 'workload', request.principal.namespace = 'native-ingress-controller-system', request.principal.service_account = 'oci-native-ingress-controller', request.principal.cluster_id = '${var.oke_cluster_id}'}",
     "Allow any-user to use virtual-network-family in compartment id ${var.comprtment_id} where all {request.principal.type = 'workload', request.principal.namespace = 'native-ingress-controller-system', request.principal.service_account = 'oci-native-ingress-controller', request.principal.cluster_id = '${var.oke_cluster_id}'}",
     "Allow any-user to manage cabundles in compartment id ${var.comprtment_id} where all {request.principal.type = 'workload', request.principal.namespace = 'native-ingress-controller-system', request.principal.service_account = 'oci-native-ingress-controller', request.principal.cluster_id = '${var.oke_cluster_id}'}",
@@ -15,7 +15,7 @@ locals {
     "Allow any-user to manage waf-family in compartment id ${var.comprtment_id} where all {request.principal.type = 'workload', request.principal.namespace = 'native-ingress-controller-system', request.principal.service_account = 'oci-native-ingress-controller', request.principal.cluster_id = '${var.oke_cluster_id}'}",
     "Allow any-user to read cluster-family in compartment id ${var.comprtment_id} where all {request.principal.type = 'workload', request.principal.namespace = 'native-ingress-controller-system', request.principal.service_account = 'oci-native-ingress-controller', request.principal.cluster_id = '${var.oke_cluster_id}'}"
   ])
-  external_dns_statements = toset([
+  external_dns_statements = tolist([
     "Allow any-user to manage dns in compartment id ${var.comprtment_id} where all {request.principal.type='workload',request.principal.cluster_id='${var.oke_cluster_id}',request.principal.service_account='external-dns', request.principal.namespace = 'external-dns'}"
   ])
   statements = concat(local.oci_native_ingress_statements, local.external_dns_statements)
