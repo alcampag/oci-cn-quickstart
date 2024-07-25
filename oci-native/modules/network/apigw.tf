@@ -18,7 +18,7 @@ resource "oci_apigateway_deployment" "apigw_oke_deployment" {
       methods = ["ANY"]
       backend {
         type = "HTTP_BACKEND"
-        url = "http://${oci_dns_rrset.lb_dns_record.domain}/api/v1/oke/$${request.path[service]}"
+        url = "http://${local.test_hostname_ingress}/api/v1/oke/$${request.path[service]}"
       }
     }
   }
