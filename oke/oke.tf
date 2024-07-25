@@ -91,6 +91,7 @@ module "oke" {
       memory = 16,
       boot_volume_size = 50,
       node_cycling_enabled = false,
+      placement_ads = ["1"],
       create = true
     }
   }

@@ -2,7 +2,7 @@
 # Also creates an initial LB that will be used as Ingress for the pods
 module "network" {
   # TODO: Option to enable LB logging (might require a log group)
-  source = "./modules/network"
+  source = "network"
   network_compartment_id = var.network_compartment_id != null ? var.network_compartment_id : var.compartment_ocid
   create_bastion_subnet = var.create_bastion_subnet
   region = var.region
@@ -103,7 +103,7 @@ module "oke" {
       ocpus                = 2,
       memory               = 16,
       boot_volume_size     = 50,
-      node_cycling_enabled = false,
+      node_cycling_enabled = true,
       create               = true
     }
   }

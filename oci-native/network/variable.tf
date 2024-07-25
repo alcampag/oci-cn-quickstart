@@ -1,6 +1,7 @@
 variable "region" {}
-variable "home_region" {}
 variable "network_compartment_id" {}
+
+variable "home_region" {}
 
 variable "vcn_name" {
   default = "vcn-spoke-1"
@@ -8,8 +9,9 @@ variable "vcn_name" {
 
 variable "create_bastion_subnet" {
   type = bool
-  default = false
+  default = true
 }
+
 variable "lb_subnet_cidr" {
   default = "10.1.0.32/27"
 }
