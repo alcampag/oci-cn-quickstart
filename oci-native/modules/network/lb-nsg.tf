@@ -9,7 +9,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker
   network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   destination_type = "NETWORK_SECURITY_GROUP"
-  destination = module.oke-network.worker_nsg_id
+  destination = oci_core_network_security_group.worker_nsg.id
   stateless = true
   description = "Allow TCP traffic from load balancer to worker nodes for services of type NodePort - stateless Egress"
   tcp_options {
@@ -25,7 +25,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker
   network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   source_type = "NETWORK_SECURITY_GROUP"
-  source = module.oke-network.worker_nsg_id
+  source = oci_core_network_security_group.worker_nsg.id
   stateless = true
   description = "Allow TCP traffic from worker nodes to load balancer for services of type NodePort - stateless Ingress"
   tcp_options {
@@ -41,7 +41,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker
   network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   destination_type = "NETWORK_SECURITY_GROUP"
-  destination = module.oke-network.worker_nsg_id
+  destination = oci_core_network_security_group.worker_nsg.id
   stateless = false
   description = "Allow TCP egress from load balancers to worker nodes for health check"
   tcp_options {
@@ -89,7 +89,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_e
   network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   destination_type = "NETWORK_SECURITY_GROUP"
-  destination = module.oke-network.pod_nsg_id
+  destination = oci_core_network_security_group.pod_nsg.id
   stateless = true
   description = "LB to pods, OCI Native Ingress - stateless egress"
 }
@@ -99,7 +99,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_i
   network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "6"
   source_type = "NETWORK_SECURITY_GROUP"
-  source = module.oke-network.pod_nsg_id
+  source = oci_core_network_security_group.pod_nsg.id
   stateless = true
   description = "LB to pods, OCI Native Ingress - stateless ingress"
 }
@@ -161,7 +161,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker
   network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
   protocol                  = "1"
   destination_type = "NETWORK_SECURITY_GROUP"
-  destination = module.oke-network.worker_nsg_id
+  destination = oci_core_network_security_group.worker_nsg.id
   stateless = false
   description = "Allow LB to discover workers"
   icmp_options {

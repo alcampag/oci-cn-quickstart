@@ -2,11 +2,10 @@
 # Also creates an initial LB that will be used as Ingress for the pods
 module "network" {
   # TODO: Option to enable LB logging (might require a log group)
-  source = "network"
+  source = "./modules/network"
   network_compartment_id = var.network_compartment_id != null ? var.network_compartment_id : var.compartment_ocid
   create_bastion_subnet = var.create_bastion_subnet
   region = var.region
-  home_region = local.home_region
   lb_subnet_private = var.lb_subnet_private
 }
 

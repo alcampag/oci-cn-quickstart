@@ -1,8 +1,6 @@
 variable "region" {}
 variable "network_compartment_id" {}
 
-variable "home_region" {}
-
 variable "vcn_name" {
   default = "vcn-spoke-1"
 }
