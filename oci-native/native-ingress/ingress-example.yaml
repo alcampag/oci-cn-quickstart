@@ -55,7 +55,7 @@ kind: Ingress
 metadata:
   name: ingress-readiness
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: ingress.lb.oke.oraclecloud.com
+    external-dns.alpha.kubernetes.io/hostname: lb.oke.oraclecloud.com
     oci-native-ingress.oraclecloud.com/healthcheck-protocol: "HTTP"
     oci-native-ingress.oraclecloud.com/healthcheck-port: "8080"
     oci-native-ingress.oraclecloud.com/healthcheck-path: "/api/v1/oke/testecho1"
