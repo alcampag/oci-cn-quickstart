@@ -4,7 +4,7 @@ We will use by default OCI Native Ingress. Support for external-dns is planned i
 
 The terraform scripts to provision the infrastructure can be run also in the cloud shell.
 
-You should also have installed on your laptop an **SSH CLIENT** and also **OCI CLI**
+You should also have installed on your laptop an **SSH CLIENT** and also **OCI CLI**, **kubectl** and **helm**
 
 
 ## Provision the infrastructure
