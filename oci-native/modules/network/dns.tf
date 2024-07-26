@@ -21,7 +21,7 @@ resource "oci_dns_zone" "oke_lb_endpoint_zone" {
   depends_on = [oci_core_vcn.spoke_vcn]
 }
 
-/*resource "oci_dns_rrset" "lb_dns_record" {
+resource "oci_dns_rrset" "lb_dns_record" {
   domain          = "ingress.${oci_dns_zone.oke_lb_endpoint_zone.name}"
   rtype           = "A"
   items {
@@ -33,5 +33,5 @@ resource "oci_dns_zone" "oke_lb_endpoint_zone" {
   zone_name_or_id = oci_dns_zone.oke_lb_endpoint_zone.id
   view_id = oci_dns_view.oke_private_lb_view.id
   scope = "PRIVATE"
-}*/
+}
 
