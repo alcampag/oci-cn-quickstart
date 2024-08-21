@@ -278,6 +278,8 @@ variables:
     title: "Custom Private Zone Domain Names"
     description: "List of private zones (custom DNS suffixes) to insert in the private view"
     type: array
+    items:
+      type: string
     required: true
 
 # VAULT
