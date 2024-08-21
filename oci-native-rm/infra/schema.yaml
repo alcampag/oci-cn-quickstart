@@ -7,9 +7,22 @@ locale: "en"
 
 variableGroups:
 
+  - title: "Hidden"
+    visible: false
+    variables:
+      - tenancy_ocid
+      - compartment_ocid
+      - bastion_subnet_private
+      - service_subnet_private
+
+  - title: "Region"
+    variables:
+      - region
+
   - title: "Network"
     variables:
       - network_compartment_id
+      - vcn_name
       - vcn_cidr_blocks
       - vcn_dns_label
       - cp_subnet_name
