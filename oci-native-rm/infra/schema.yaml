@@ -1,0 +1,347 @@
+title: OCI Native - Base Infra
+description: Basic infrastructure and network rules to start with a Cloud Native project
+informationalText: Basic infrastructure
+schemaVersion: 1.1.0
+version: "20190304"
+locale: "en"
+
+variableGroups:
+
+  - title: "Hidden"
+    visible: false
+    variables:
+      - tenancy_ocid
+      - compartment_ocid
+      - bastion_subnet_private
+      - service_subnet_private
+
+  - title: "Region"
+    variables:
+      - my_region
+
+  - title: "Network"
+    variables:
+      - network_compartment_id
+      - vcn_name
+      - vcn_cidr_blocks
+      - vcn_dns_label
+      - cp_subnet_name
+      - cp_subnet_cidr
+      - cp_subnet_dns_label
+      - worker_subnet_name
+      - worker_subnet_cidr
+      - worker_subnet_dns_label
+      - pod_subnet_name
+      - pod_subnet_cidr
+      - pod_subnet_dns_label
+      - service_subnet_name
+      - service_subnet_cidr
+      - service_subnet_dns_label
+
+  - title: "Bastion"
+    variables:
+      - create_bastion
+      - bastion_subnet_name
+      - bastion_subnet_cidr
+      - bastion_subnet_dns_label
+      - bastion_compartment_id
+      - bastion_cidr_block_allow_list
+
+  - title: "Load Balancer"
+    variables:
+      - lb_name
+      - lb_min_bandwidth
+      - lb_max_bandwidth
+      - create_lb_http_redirect_rule
+      - create_waa
+
+  - title: "DNS"
+    variables:
+      - custom_private_view_name
+      - vcn_custom_private_zone_domain_names
+
+  - title: "Vault"
+    variables:
+      - vault_compartment_id
+      - vault_name
+
+  - title: "Certificate"
+    variables:
+      - certificate_compartment_id
+      - root_ca_subject_common_name
+      - np_ca_subject_common_name
+      - cluster_ca_subject_common_name
+      - lb_certificate_subject_common_name
+      - apigw_certificate_subject_common_name
+
+  - title: "API Gateway"
+    variables:
+      - apigw_name
+
+variables:
+
+  my_region:
+    title: "Region"
+    type: oci:identity:region:name
+    default: ${region}
+    required: true
+
+  network_compartment_id:
+    title: "Network Compartment"
+    description: "All resources in this section will be created within the compartment chosen"
+    type: oci:identity:compartment:id
+    required: true
+
+# VCN
+
+  vcn_name:
+    title: "VCN Name"
+    description: "Name of the VCN to create"
+    type: string
+    required: true
+
+  vcn_cidr_blocks:
+    title: "VCN CIDR blocks"
+    description: "CIDR blocks to be allocated for the VCN"
+    type: array
+    items:
+      type: string
+    required: true
+
+  vcn_dns_label:
+    title: "VCN DNS name"
+    description: "This dns label will be present by default whenever a new instance is created in the VCN"
+    type: string
+    required: true
+
+# CP SUBNET
+
+  cp_subnet_cidr:
+    title: "Kubernetes Control Plane Subnet CIDR"
+    description: "CIDR block to allocate for Kubernetes Control Plane API Server. As it is just one endpoint, it can be small"
+    type: string
+    required: true
+
+  cp_subnet_dns_label:
+    title: "Kubernetes Control Plane DNS label"
+    description: "DNS label for the Kubernetes Control Plane subnet"
+    type: string
+    required: true
+
+  cp_subnet_name:
+    title: "Kubernetes Control Plane subnet name"
+    description: "Name of the subnet containing the Kubernetes Control Plane API Server"
+    type: string
+    required: true
+
+# WORKER SUBNET
+
+  worker_subnet_cidr:
+    title: "Worker subnet CIDR"
+    description: "CIDR block for OKE worker nodes and other VM or workload like functions"
+    type: string
+    required: true
+
+  worker_subnet_dns_label:
+    title: "Worker subnet DNS label"
+    description: "DNS label for the Worker subnet"
+    type: string
+    required: true
+
+  worker_subnet_name:
+    title: "Worker subnet name"
+    description: "Name of the Worker subnet"
+    type: string
+    required: true
+
+# POD SUBNET
+
+  pod_subnet_cidr:
+    title: "Pod subnet CIDR"
+    description: "CIDR block for OKE pods"
+    type: string
+    required: true
+
+  pod_subnet_dns_label:
+    title: "Pod subnet DNS label"
+    description: "DNS label for the Pod subnet"
+    type: string
+    required: true
+
+  pod_subnet_name:
+    title: "Pod subnet name"
+    description: "OKE pods will have an IP address assigned from this subnet"
+    type: string
+    required: true
+
+# SERVICE SUBNET
+
+  service_subnet_cidr:
+    title: "Service subnet CIDR"
+    description: "CIDR block for the Service subnet"
+    type: string
+    required: true
+
+  service_subnet_dns_label:
+    title: "Service subnet DNS label"
+    description: "DNS label for the Service subnet"
+    type: string
+    required: true
+
+  service_subnet_name:
+    title: "Service subnet name"
+    description: "The Service subnet will host all the network appliances necessary to expose services, so Load Balancers and API Gateways"
+    type: string
+    required: true
+
+# BASTION SUBNET + BASTION MODULE
+
+  create_bastion:
+    title: "Create Bastion"
+    description: "If flagged, the Stack creates the Bastion Subnet + an OCI Bastion instance"
+    type: boolean
+
+  bastion_subnet_name:
+    title: "Bastion subnet name"
+    description: "Name of the subnet for Bastions"
+    type: string
+    required: true
+    visible: ${create_bastion}
+
+  bastion_subnet_cidr:
+    title: "Bastion subnet CIDR"
+    description: "CIDR block to allocate for the Bastion subnet"
+    type: string
+    required: true
+    visible: ${create_bastion}
+
+  bastion_subnet_dns_label:
+    title: "Bastion subnet DNS label"
+    description: "DNS label for the Bastion subnet"
+    type: string
+    required: true
+    visible: ${create_bastion}
+
+  bastion_compartment_id:
+    title: "Bastion Compartment"
+    description: "Compartment where to create the OCI Bastion instance"
+    type: oci:identity:compartment:id
+    required: true
+    visible: ${create_bastion}
+
+  bastion_cidr_block_allow_list:
+    title: "Bastion allow list"
+    description: "CIDR blocks in this list will be able to connect to the OCI Bastion instance"
+    type: array
+    items:
+      type: string
+    required: true
+    visible: ${create_bastion}
+
+# LOAD BALANCER
+
+  lb_name:
+    title: "Load Balancer Name"
+    description: "Name of the Load Balancer that will be used by OKE to expose pods"
+    type: string
+    required: true
+
+  lb_min_bandwidth:
+    title: "Load Balancer minimum bandwidth"
+    description: "Minimum bandwidth to allocate to the Load Balancer"
+    type: integer
+    minimum: 10
+    required: true
+
+  lb_max_bandwidth:
+    title: "Load Balancer maximum bandwidth"
+    description: "Maximum bandwidth that the Load Balancer can allocate"
+    type: integer
+    minimum: 10
+    required: true
+
+  create_lb_http_redirect_rule:
+    title: "Create HTTP redirect rule"
+    description: "If flagged, a rule set will be created on the Load Balancer to redirect all HTTP traffic to HTTPS"
+    type: boolean
+
+  create_waa:
+    title: "Create Web Application Acceleration"
+    description: "Create a Web Application Acceleration Policy and attach it to the Load Balancer"
+    type: boolean
+
+# DNS
+
+  custom_private_view_name:
+    title: "Custom DNS Name - Private View"
+    description: "Name of the Private View for the custom DNS names"
+    type: string
+    required: true
+
+  vcn_custom_private_zone_domain_names:
+    title: "Custom Private Zone Domain Names"
+    description: "List of private zones (custom DNS suffixes) to insert in the private view"
+    type: array
+    items:
+      type: string
+    required: true
+
+# VAULT
+
+  vault_compartment_id:
+    title: "Vault Compartment"
+    description: "Compartment where to create the OCI Vault"
+    type: oci:identity:compartment:id
+    required: true
+
+  vault_name:
+    title: "Vault Name"
+    description: "Name of the Vault to create"
+    type: string
+    required: true
+
+# CERTIFICATE
+
+  certificate_compartment_id:
+    title: "Certificate Compartment"
+    description: "Compartment where to create the OCI Certificate resources"
+    type: oci:identity:compartment:id
+    required: true
+
+  root_ca_subject_common_name:
+    title: "Root CA Subject Common Name"
+    description: "Subject Common Name for the Root certificate authority"
+    type: string
+    required: true
+
+  np_ca_subject_common_name:
+    title: "Environment Specific CA Subject Common Name"
+    description: "Subordinate Certificate Authority for a specific environment"
+    type: string
+    required: true
+
+  cluster_ca_subject_common_name:
+    title: "Cluster CA Subject Common Name"
+    description: "Subordinate Certificate Authority for the OKE cluster"
+    type: string
+    required: true
+
+  lb_certificate_subject_common_name:
+    title: "Load Balancer certificate Subject Common Name"
+    description: "Subject Common Name of the OKE Load Balancer certificate"
+    type: string
+    required: true
+
+  apigw_certificate_subject_common_name:
+    title: "API Gateway certificate Subject Common Name"
+    description: "Subject Common Name of the API Gateway certificate"
+    type: string
+    required: true
+
+# APIGW
+
+  apigw_name:
+    title: "API Gateway Name"
+    description: "Name of the API Gateway"
+    type: string
+    required: true
