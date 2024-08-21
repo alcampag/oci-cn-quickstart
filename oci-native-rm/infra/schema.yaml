@@ -80,6 +80,10 @@ variableGroups:
 
 variables:
 
+  region:
+    type: oci:identity:region:name
+    required: true
+
   network_compartment_id:
     title: "Network Compartment"
     description: "All resources in this section will be created within the compartment chosen"
