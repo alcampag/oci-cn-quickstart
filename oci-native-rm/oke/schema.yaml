@@ -57,6 +57,7 @@ variables:
     type: oci:core:vcn:id
     dependsOn:
       compartmentId: ${network_compartment_id}
+      region: ${my_region}
     required: true
 
   lb_subnet_id:
@@ -68,6 +69,7 @@ variables:
       vcnId: ${vcn_id}
       hidePublicSubnet: true
       hideAdSubnet: true
+      region: ${my_region}
     required: true
 
   cp_subnet_id:
@@ -79,6 +81,7 @@ variables:
       vcnId: ${vcn_id}
       hidePublicSubnet: true
       hideAdSubnet: true
+      region: ${my_region}
     required: true
 
   worker_subnet_id:
@@ -90,6 +93,7 @@ variables:
       vcnId: ${vcn_id}
       hidePublicSubnet: true
       hideAdSubnet: true
+      region: ${my_region}
     required: true
 
   pod_subnet_id:
@@ -101,6 +105,7 @@ variables:
       vcnId: ${vcn_id}
       hidePublicSubnet: true
       hideAdSubnet: true
+      region: ${my_region}
     required: true
 
   cp_nsg_id:
@@ -109,6 +114,7 @@ variables:
     type: oci:core:nsg:id
     dependsOn:
       compartmentId: ${network_compartment_id}
+      region: ${my_region}
     required: true
 
   cp_allowed_cidr_list:
