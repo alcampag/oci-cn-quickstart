@@ -201,30 +201,35 @@ variables:
     title: "Bastion subnet name"
     description: "Name of the subnet for Bastions"
     type: string
+    required: true
     visible: ${create_bastion}
 
   bastion_subnet_cidr:
     title: "Bastion subnet CIDR"
     description: "CIDR block to allocate for the Bastion subnet"
     type: string
+    required: true
     visible: ${create_bastion}
 
   bastion_subnet_dns_label:
     title: "Bastion subnet DNS label"
     description: "DNS label for the Bastion subnet"
     type: string
+    required: true
     visible: ${create_bastion}
 
   bastion_compartment_id:
     title: "Bastion Compartment"
     description: "Compartment where to create the OCI Bastion instance"
     type: oci:identity:compartment:id
+    required: true
     visible: ${create_bastion}
 
   bastion_cidr_block_allow_list:
     title: "Bastion allow list"
     description: "CIDR blocks in this list will be able to connect to the OCI Bastion instance"
     type: array
+    required: true
     visible: ${create_bastion}
 
 # LOAD BALANCER
