@@ -12,8 +12,3 @@ variable "kubernetes_version" {
 variable "network_compartment_id" {
   default = null
 }
-
-variable "lb_subnet_private" {
-  type = bool
-  default = true
-}

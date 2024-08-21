@@ -10,3 +10,26 @@ resource "oci_containerengine_addon" "oke_metrics_server" {
   remove_addon_resources_on_delete = false
   depends_on = [oci_containerengine_addon.oke_cert_manager]
 }
+
+resource "oci_containerengine_addon" "oci_native_ingress" {
+  addon_name                       = "NativeIngressController"
+  cluster_id                       = var.oke_cluster_id
+  configurations {
+    key = "compartmentId"
+    value = var.network_compartment_id
+  }
+  configurations {
+    key = "loadBalancerSubnetId"
+    value = var.service_subnet_id
+  }
+  configurations {
+    key = "authType"
+    value = "workloadIdentity"
+  }
+  configurations {
+    key = "numOfReplicas"
+    value = "1"
+  }
+  remove_addon_resources_on_delete = false
+  depends_on = [oci_containerengine_addon.oke_cert_manager]
+}

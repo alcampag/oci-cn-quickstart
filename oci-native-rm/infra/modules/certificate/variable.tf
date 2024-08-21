@@ -1,0 +1,10 @@
+variable "region" {}
+variable "compartment_id" {}
+variable "root_ca_key_id" {}
+variable "root_ca_subject_common_name" {}
+variable "np_ca_key_id" {}
+variable "np_ca_subject_common_name" {}
+variable "cluster_ca_key_id" {}
+variable "cluster_ca_subject_common_name" {}
+variable "lb_certificate_subject_common_name" {}
+variable "apigw_certificate_subject_common_name" {}
