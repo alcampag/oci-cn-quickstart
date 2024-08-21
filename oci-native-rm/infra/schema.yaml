@@ -104,6 +104,8 @@ variables:
     title: "VCN CIDR blocks"
     description: "CIDR blocks to be allocated for the VCN"
     type: array
+    items:
+      type: string
     required: true
 
   vcn_dns_label:
@@ -231,6 +233,8 @@ variables:
     title: "Bastion allow list"
     description: "CIDR blocks in this list will be able to connect to the OCI Bastion instance"
     type: array
+    items:
+      type: string
     required: true
     visible: ${create_bastion}
 
