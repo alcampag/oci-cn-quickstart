@@ -17,7 +17,7 @@ variableGroups:
 
   - title: "Region"
     variables:
-      - region
+      - my_region
 
   - title: "Network"
     variables:
@@ -80,8 +80,10 @@ variableGroups:
 
 variables:
 
-  region:
+  my_region:
+    title: "Region"
     type: oci:identity:region:name
+    default: ${region}
     required: true
 
   network_compartment_id:

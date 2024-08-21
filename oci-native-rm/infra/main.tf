@@ -1,7 +1,7 @@
 module "network" {
   source = "./modules/network"
   network_compartment_id = var.network_compartment_id
-  region = var.region
+  region = var.my_region
   # VCN
   vcn_name = var.vcn_name
   vcn_cidr_blocks = var.vcn_cidr_blocks
@@ -33,7 +33,7 @@ module "network" {
 
 module "bastion" {
   source = "./modules/bastion"
-  region = var.region
+  region = var.my_region
   compartment_id = var.bastion_compartment_id
   vcn_name = var.vcn_name
   bastion_subnet_id = module.network.bastion_subnet_id
@@ -44,7 +44,7 @@ module "bastion" {
 module "lb" {
   source = "./modules/lb"
   network_compartment_id = var.network_compartment_id
-  region = var.region
+  region = var.my_region
   subnet_id = module.network.service_subnet_id
   lb_nsg_id = module.network.lb_nsg_id
   lb_name = var.lb_name
@@ -57,7 +57,7 @@ module "lb" {
 
 module "dns" {
   source = "./modules/dns"
-  region = var.region
+  region = var.my_region
   compartment_id = var.network_compartment_id
   vcn_id = module.network.vcn_id
   custom_private_view_name = var.custom_private_view_name
@@ -66,14 +66,14 @@ module "dns" {
 
 module "vault" {
   source = "./modules/vault"
-  region = var.region
+  region = var.my_region
   compartment_id = var.vault_compartment_id
   vault_name = var.vault_name
 }
 
 module "certificate" {
   source = "./modules/certificate"
-  region = var.region
+  region = var.my_region
   compartment_id = var.certificate_compartment_id
   cluster_ca_key_id = module.vault.cluster_ca_key_id
   np_ca_key_id = module.vault.np_ca_key_id
@@ -87,7 +87,7 @@ module "certificate" {
 
 module "apigw" {
   source = "./modules/apigw"
-  region = var.region
+  region = var.my_region
   network_compartment_id = var.network_compartment_id
   apigw_nsg_id = module.network.apigw_nsg_id
   subnet_id = module.network.service_subnet_id

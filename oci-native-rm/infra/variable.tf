@@ -1,5 +1,5 @@
 variable "tenancy_ocid" {}
-variable "region" {}
+variable "my_region" {}
 variable "compartment_ocid" {}
 variable "network_compartment_id" {}
 
