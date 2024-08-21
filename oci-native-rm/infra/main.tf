@@ -71,6 +71,8 @@ module "vault" {
   vault_name = var.vault_name
 }
 
+
+# As a Certificate can't be deleted immediately, so the CAs can't be deleted until the certificate has been fully deleted...
 module "certificate" {
   source = "./modules/certificate"
   region = var.my_region
