@@ -15,7 +15,7 @@ variableGroups:
 
   - title: "Region"
     variables:
-      - my_region
+      - region
 
   - title: "Network"
     variables:
