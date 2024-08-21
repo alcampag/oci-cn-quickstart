@@ -8,3 +8,5 @@ variable "cluster_ca_key_id" {}
 variable "cluster_ca_subject_common_name" {}
 variable "lb_certificate_subject_common_name" {}
 variable "apigw_certificate_subject_common_name" {}
+variable "oke_lb_certificate_name" {}
+variable "apigw_certificate_name" {}

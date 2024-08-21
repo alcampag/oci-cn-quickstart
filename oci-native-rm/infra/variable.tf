@@ -183,6 +183,14 @@ variable "root_ca_subject_common_name" {
   default = "oci.acme.tst"
 }
 
+variable "oke_lb_certificate_name" {
+  default = "oke-lb-certificate"
+}
+
+variable "apigw_certificate_name" {
+  default = "api-gw-certificate"
+}
+
 # APIGW
 
 variable "apigw_name" {

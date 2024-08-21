@@ -1,8 +1,3 @@
-resource "oci_apigateway_certificate" "apigw_custom_tls_certificate" {
-  certificate    = ""
-  compartment_id = ""
-  private_key    = ""
-}
 
 resource "oci_apigateway_gateway" "api_gw" {
   compartment_id = var.network_compartment_id

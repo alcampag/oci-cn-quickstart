@@ -73,6 +73,8 @@ variableGroups:
       - cluster_ca_subject_common_name
       - lb_certificate_subject_common_name
       - apigw_certificate_subject_common_name
+      - oke_lb_certificate_name
+      - apigw_certificate_name
 
   - title: "API Gateway"
     variables:
@@ -335,6 +337,18 @@ variables:
   apigw_certificate_subject_common_name:
     title: "API Gateway certificate Subject Common Name"
     description: "Subject Common Name of the API Gateway certificate"
+    type: string
+    required: true
+
+  oke_lb_certificate_name:
+    title: "OKE Load Balancer certificate name"
+    description: "Certificate name for the OKE Load Balancer"
+    type: string
+    required: true
+
+  apigw_certificate_name:
+    title: "API Gateway certificate name"
+    description: "Certificate name for the API Gateway"
     type: string
     required: true
 

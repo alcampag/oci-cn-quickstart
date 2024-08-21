@@ -1,6 +1,6 @@
 resource "oci_certificates_management_certificate" "oke_wildcard_lb_certificate" {
   compartment_id = var.compartment_id
-  name           = "oke-lb-certificate"
+  name           = var.oke_lb_certificate_name
   description = "This is the certificate for enabling TLS encryption of OKE services exposed through the OKE LB. This should be a wildcard certificate and must be linked to the OKE LB"
   certificate_config {
     config_type = "ISSUED_BY_INTERNAL_CA"
@@ -14,7 +14,7 @@ resource "oci_certificates_management_certificate" "oke_wildcard_lb_certificate"
 
 resource "oci_certificates_management_certificate" "apigw_certificate" {
   compartment_id = var.compartment_id
-  name           = "apigw-certificate"
+  name           = var.apigw_certificate_name
   description = "This is the certificate for the APIGW. The subject common name will be the internal dns name of the APIGW."
   certificate_config {
     config_type = "ISSUED_BY_INTERNAL_CA"

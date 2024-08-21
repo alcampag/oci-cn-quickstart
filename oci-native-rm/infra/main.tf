@@ -85,6 +85,8 @@ module "certificate" {
   apigw_certificate_subject_common_name = var.apigw_certificate_subject_common_name
   np_ca_subject_common_name = var.np_ca_subject_common_name
   root_ca_subject_common_name = var.root_ca_subject_common_name
+  oke_lb_certificate_name = var.oke_lb_certificate_name
+  apigw_certificate_name = var.apigw_certificate_name
 }
 
 module "apigw" {
