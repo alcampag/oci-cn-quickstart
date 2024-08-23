@@ -1,0 +1,143 @@
+title: OCI Native - OKE
+description: OKE Cluster to be installed on top of an existing infrastructure
+informationalText: OKE init
+schemaVersion: 1.1.0
+version: "20190304"
+locale: "en"
+
+
+variableGroups:
+
+  - title: "Hidden"
+    visible: false
+    variables:
+      - tenancy_ocid
+
+  - title: "Region"
+    variables:
+      - region
+
+  - title: "Network"
+    variables:
+      - network_compartment_id
+      - vcn_id
+      - lb_subnet_id
+      - cp_subnet_id
+      - worker_subnet_id
+      - pod_subnet_id
+      - cp_nsg_id
+      - cp_allowed_cidr_list
+
+  - title: "Cluster"
+    variables:
+      - oke_compartment_id
+      - cluster_name
+      - kubernetes_version
+
+variables:
+
+  region:
+    title: "Region"
+    type: oci:identity:region:name
+    required: true
+
+# NETWORK
+
+  network_compartment_id:
+    title: "Network Compartment"
+    description: "Compartments where the network resources for OKE are present"
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+
+  vcn_id:
+    title: "VCN id"
+    description: "Existing VCN where to create the OKE cluster"
+    type: oci:core:vcn:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+    required: true
+
+  lb_subnet_id:
+    title: "Load Balancer Subnet"
+    description: "Existing Subnet where all Load Balancer services will be created by default"
+    type: oci:core:subnet:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${vcn_id}
+      hidePublicSubnet: true
+      hideAdSubnet: true
+    required: true
+
+  cp_subnet_id:
+    title: "Control Plane Subnet"
+    description: "Existing Subnet that will host the Control Plane"
+    type: oci:core:subnet:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${vcn_id}
+      hidePublicSubnet: true
+      hideAdSubnet: true
+    required: true
+
+  worker_subnet_id:
+    title: "Worker Subnet"
+    description: "Existing Subnet that will host the OKE Worker Nodes"
+    type: oci:core:subnet:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${vcn_id}
+      hidePublicSubnet: true
+      hideAdSubnet: true
+    required: true
+
+  pod_subnet_id:
+    title: "Pod Subnet"
+    description: "Existing Subnet that will host the OKE Pods"
+    type: oci:core:subnet:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${vcn_id}
+      hidePublicSubnet: true
+      hideAdSubnet: true
+    required: true
+
+  cp_nsg_id:
+    title: "Control Plane NSG"
+    description: "Existing NSG to attach to the Control Plane OKE API Server"
+    type: oci:core:nsg:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+    required: true
+
+  cp_allowed_cidr_list:
+    title: "Control Plane allowed CIDR blocks"
+    description: "Allowed CIDR blocks that can reach the OKE Control Plane"
+    type: array
+    items:
+      type: string
+    required: true
+
+# CLUSTER
+
+  oke_compartment_id:
+    title: "OKE Cluster Compartment"
+    description: "Compartment where to create the OKE Cluster"
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+
+  cluster_name:
+    title: "OKE Cluster name"
+    description: "Name of the OKE cluster"
+    type: string
+    required: true
+
+  kubernetes_version:
+    type: oci:kubernetes:versions:id
+    title: "Kubernetes version"
+    description: "The Oracle cloud kubernetes version for the cluster"
+    required: true
+    dependsOn:
+      compartmentId: ${oke_compartment_id}
+      clusterOptionId: "all"

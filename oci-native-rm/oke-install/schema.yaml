@@ -1,0 +1,93 @@
+title: OKE INIT
+description: Install initial applications on OKE through Terraform Stack
+informationalText: OKE installation pack
+schemaVersion: 1.1.0
+version: "20190304"
+locale: "en"
+
+
+variableGroups:
+
+  - title: "Hidden"
+    visible: false
+    variables:
+      - region
+
+  - title: "Target Cluster"
+    variables:
+      - oke_cluster_compartment_id
+      - oke_cluster_id
+
+  - title: "Private Endpoint"
+    variables:
+      - pe_compartment_id
+      - oke_vcn_id
+      - cp_subnet_id
+      - worker_nsg_id
+
+
+variables:
+
+  region:
+    title: "Region"
+    type: oci:identity:region:name
+    required: true
+
+  oke_cluster_compartment_id:
+    title: "OKE Cluster compartment"
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+
+
+  oke_cluster_id:
+    title: "OKE Cluster"
+    description: "Cluster where to install components"
+    type: oci:container:cluster:id
+    dependsOn:
+      compartmentId: ${oke_cluster_compartment_id}
+    required: true
+
+  pe_compartment_id:
+    title: "Private Endpoint compartment"
+    description: "Compartment where to create the private endpoint"
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+
+  network_compartment_id:
+    title: "Network compartment"
+    description: "Compartment where network resources have been created for OKE"
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+
+  oke_vcn_id:
+    title: "Target VCN"
+    description: "This must be the VCN where the OKE cluster has been created"
+    type: oci:core:vcn:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+    required: true
+
+  cp_subnet_id:
+    title: "Target subnet"
+    description: "This must be the control plane subnet of the OKE cluster"
+    type: oci:core:subnet:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${oke_vcn_id}
+      hidePublicSubnet: true
+    required: true
+
+  worker_nsg_id:
+    title: "Private endpoint NSG"
+    description: "This must be the worker NSG"
+    type: oci:core:nsg:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${oke_vcn_id}
+    required: true
+
+
+
