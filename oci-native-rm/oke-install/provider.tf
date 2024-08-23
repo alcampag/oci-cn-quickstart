@@ -19,7 +19,7 @@ provider "oci" {
 provider "helm" {
   kubernetes {
     host                   = local.cluster_endpoint
-    cluster_ca_certificate = local.kube_cluster_ca_certificate
+    insecure = true
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
       args        = ["ce", "cluster", "generate-token", "--cluster-id", var.oke_cluster_id, "--region", var.region]
