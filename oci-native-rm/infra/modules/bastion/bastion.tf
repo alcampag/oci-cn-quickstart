@@ -5,5 +5,4 @@ resource "oci_bastion_bastion" "vcn_spoke_bastion" {
   name = "bastion-${var.vcn_name}"
   dns_proxy_status = "ENABLED"
   client_cidr_block_allow_list = var.bastion_cidr_block_allow_list
-  count = var.create_bastion ? 1 : 0
 }

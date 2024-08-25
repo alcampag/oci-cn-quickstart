@@ -9,5 +9,5 @@ terraform {
 }
 
 provider "oci" {
-  region = var.my_region
+  region = var.region
 }

@@ -1,5 +1,5 @@
 variable "tenancy_ocid" {}
-variable "my_region" {}
+variable "region" {}
 variable "compartment_ocid" {}
 variable "network_compartment_id" {}
 
@@ -153,6 +153,11 @@ variable "vcn_custom_private_zone_domain_names" {
 
 # VAULT
 
+variable "create_vault" {
+  type = bool
+  default = false
+}
+
 variable "vault_compartment_id" {
   default = null
 }
@@ -162,6 +167,11 @@ variable "vault_name" {
 }
 
 # CERTIFICATE
+
+variable "create_certificates" {
+  type = bool
+  default = false
+}
 
 variable "certificate_compartment_id" {
   default = null
@@ -192,6 +202,11 @@ variable "apigw_certificate_name" {
 }
 
 # APIGW
+
+variable "create_apigw" {
+  type = bool
+  default = false
+}
 
 variable "apigw_name" {
   default = "oci-apigw-quickstart"

@@ -1,11 +1,12 @@
 resource "helm_release" "nginx" {
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart = "ingress-nginx"
-  name  = "nginx-test"
+  name  = var.nginx_release_name  # <release-name>-ingress-nginx-controller
+  version = var.nginx_chart_version
   create_namespace = true
-  namespace = "nginx"
+  namespace = var.nginx_namespace
   set {
     name  = "controller.service.type"
-    value = "ClusterIP"
+    value = var.nginx_service_type
   }
 }

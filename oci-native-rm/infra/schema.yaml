@@ -12,12 +12,9 @@ variableGroups:
     variables:
       - tenancy_ocid
       - compartment_ocid
+      - region
       - bastion_subnet_private
       - service_subnet_private
-
-  - title: "Region"
-    variables:
-      - my_region
 
   - title: "Network"
     variables:
@@ -62,11 +59,14 @@ variableGroups:
 
   - title: "Vault"
     variables:
+      - create_vault
       - vault_compartment_id
       - vault_name
 
   - title: "Certificate"
+    visible: ${create_vault}
     variables:
+      - create_certificates
       - certificate_compartment_id
       - root_ca_subject_common_name
       - np_ca_subject_common_name
@@ -78,11 +78,12 @@ variableGroups:
 
   - title: "API Gateway"
     variables:
+      - create_apigw
       - apigw_name
 
 variables:
 
-  my_region:
+  region:
     title: "Region"
     type: oci:identity:region:name
     default: ${region}
@@ -290,6 +291,11 @@ variables:
 
 # VAULT
 
+  create_vault:
+    title: "Create Vault"
+    description: "Create a sample Vault"
+    type: boolean
+
   vault_compartment_id:
     title: "Vault Compartment"
     description: "Compartment where to create the OCI Vault"
@@ -304,58 +310,77 @@ variables:
 
 # CERTIFICATE
 
+  create_certificates:
+    title: "Create certificates and Certificate Authorities"
+    description: "NOTE: Certificates and CAs are very difficult to delete, enable them only if you know what you are doing"
+    type: boolean
+
   certificate_compartment_id:
     title: "Certificate Compartment"
     description: "Compartment where to create the OCI Certificate resources"
     type: oci:identity:compartment:id
     required: true
+    visible: ${create_certificates}
 
   root_ca_subject_common_name:
     title: "Root CA Subject Common Name"
     description: "Subject Common Name for the Root certificate authority"
     type: string
     required: true
+    visible: ${create_certificates}
 
   np_ca_subject_common_name:
     title: "Environment Specific CA Subject Common Name"
     description: "Subordinate Certificate Authority for a specific environment"
     type: string
     required: true
+    visible: ${create_certificates}
 
   cluster_ca_subject_common_name:
     title: "Cluster CA Subject Common Name"
     description: "Subordinate Certificate Authority for the OKE cluster"
     type: string
     required: true
+    visible: ${create_certificates}
 
   lb_certificate_subject_common_name:
     title: "Load Balancer certificate Subject Common Name"
     description: "Subject Common Name of the OKE Load Balancer certificate"
     type: string
     required: true
+    visible: ${create_certificates}
 
   apigw_certificate_subject_common_name:
     title: "API Gateway certificate Subject Common Name"
     description: "Subject Common Name of the API Gateway certificate"
     type: string
     required: true
+    visible: ${create_certificates}
 
   oke_lb_certificate_name:
     title: "OKE Load Balancer certificate name"
     description: "Certificate name for the OKE Load Balancer"
     type: string
     required: true
+    visible: ${create_certificates}
 
   apigw_certificate_name:
     title: "API Gateway certificate name"
     description: "Certificate name for the API Gateway"
     type: string
     required: true
+    visible: ${create_certificates}
 
 # APIGW
+
+  create_apigw:
+    title: "Create API Gateway"
+    description: "Create an API Gateway. Configure it later so that it points to the OKE Load Balancer as backend"
+    type: boolean
 
   apigw_name:
     title: "API Gateway Name"
     description: "Name of the API Gateway"
     type: string
     required: true
+    visible: ${create_apigw}

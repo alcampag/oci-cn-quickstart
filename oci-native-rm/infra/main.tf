@@ -1,7 +1,7 @@
 module "network" {
   source = "./modules/network"
   network_compartment_id = var.network_compartment_id
-  region = var.my_region
+  region = var.region
   # VCN
   vcn_name = var.vcn_name
   vcn_cidr_blocks = var.vcn_cidr_blocks
@@ -33,18 +33,18 @@ module "network" {
 
 module "bastion" {
   source = "./modules/bastion"
-  region = var.my_region
+  region = var.region
   compartment_id = var.bastion_compartment_id
   vcn_name = var.vcn_name
   bastion_subnet_id = module.network.bastion_subnet_id
   bastion_cidr_block_allow_list = var.bastion_cidr_block_allow_list
-  create_bastion = var.create_bastion
+  count = var.create_bastion ? 1 : 0
 }
 
 module "lb" {
   source = "./modules/lb"
   network_compartment_id = var.network_compartment_id
-  region = var.my_region
+  region = var.region
   subnet_id = module.network.service_subnet_id
   lb_nsg_id = module.network.lb_nsg_id
   lb_name = var.lb_name
@@ -57,7 +57,7 @@ module "lb" {
 
 module "dns" {
   source = "./modules/dns"
-  region = var.my_region
+  region = var.region
   compartment_id = var.network_compartment_id
   vcn_id = module.network.vcn_id
   custom_private_view_name = var.custom_private_view_name
@@ -66,20 +66,21 @@ module "dns" {
 
 module "vault" {
   source = "./modules/vault"
-  region = var.my_region
+  region = var.region
   compartment_id = var.vault_compartment_id
   vault_name = var.vault_name
+  count = var.create_vault ? 1 : 0
 }
 
 
 # As a Certificate can't be deleted immediately, so the CAs can't be deleted until the certificate has been fully deleted...
 module "certificate" {
   source = "./modules/certificate"
-  region = var.my_region
+  region = var.region
   compartment_id = var.certificate_compartment_id
-  cluster_ca_key_id = module.vault.cluster_ca_key_id
-  np_ca_key_id = module.vault.np_ca_key_id
-  root_ca_key_id = module.vault.root_ca_key_id
+  cluster_ca_key_id = module.vault.0.cluster_ca_key_id
+  np_ca_key_id = module.vault.0.np_ca_key_id
+  root_ca_key_id = module.vault.0.root_ca_key_id
   cluster_ca_subject_common_name = var.cluster_ca_subject_common_name
   lb_certificate_subject_common_name = var.lb_certificate_subject_common_name
   apigw_certificate_subject_common_name = var.apigw_certificate_subject_common_name
@@ -87,11 +88,12 @@ module "certificate" {
   root_ca_subject_common_name = var.root_ca_subject_common_name
   oke_lb_certificate_name = var.oke_lb_certificate_name
   apigw_certificate_name = var.apigw_certificate_name
+  count = var.create_certificates ? 1 : 0
 }
 
 module "apigw" {
   source = "./modules/apigw"
-  region = var.my_region
+  region = var.region
   network_compartment_id = var.network_compartment_id
   apigw_nsg_id = module.network.apigw_nsg_id
   subnet_id = module.network.service_subnet_id
@@ -99,6 +101,7 @@ module "apigw" {
   create_example_deployment = false
   apigw_name = var.apigw_name
   example_deployment_hostname = "oke.example.com"
-  apigw_certificate_id = module.certificate.apigw_certificate_id
-  apigw_certificate_authority_id = module.certificate.np_ca_id
+  apigw_certificate_id = var.create_certificates ? module.certificate.0.apigw_certificate_id : null
+  apigw_certificate_authority_id = var.create_certificates ? module.certificate.0.np_ca_id : null
+  count = var.create_apigw ? 1 : 0
 }
