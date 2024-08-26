@@ -103,6 +103,7 @@ variables:
     type: oci:core:nsg:id
     dependsOn:
       compartmentId: ${network_compartment_id}
+      vcnId: ${vcn_id}
     required: true
 
   cp_allowed_cidr_list:
