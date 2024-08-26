@@ -25,7 +25,7 @@ variableGroups:
       - cp_subnet_cidr
       - cp_subnet_dns_label
       - cp_subnet_private
-      - create_cp_public_allow_rule
+      - create_cp_subnet_allow_rule
       - worker_subnet_name
       - worker_subnet_cidr
       - worker_subnet_dns_label
