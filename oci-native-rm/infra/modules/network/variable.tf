@@ -22,6 +22,14 @@ variable "cp_subnet_dns_label" {
 variable "cp_subnet_name" {
 }
 
+variable "cp_subnet_private" {
+  type = bool
+}
+
+variable "create_cp_public_allow_rule" {
+  type = bool
+}
+
 # WORKER SUBNET
 
 variable "worker_subnet_cidr" {
@@ -77,4 +85,10 @@ variable "bastion_subnet_dns_label" {
 }
 
 variable "bastion_subnet_name" {
+}
+
+# APIGW
+
+variable "create_apigw" {
+  type = bool
 }

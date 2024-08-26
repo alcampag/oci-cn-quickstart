@@ -14,7 +14,6 @@ variableGroups:
       - compartment_ocid
       - region
       - bastion_subnet_private
-      - service_subnet_private
 
   - title: "Network"
     variables:
@@ -25,6 +24,8 @@ variableGroups:
       - cp_subnet_name
       - cp_subnet_cidr
       - cp_subnet_dns_label
+      - cp_subnet_private
+      - create_cp_public_allow_rule
       - worker_subnet_name
       - worker_subnet_cidr
       - worker_subnet_dns_label
@@ -34,6 +35,7 @@ variableGroups:
       - service_subnet_name
       - service_subnet_cidr
       - service_subnet_dns_label
+      - service_subnet_private
 
   - title: "Bastion"
     variables:
@@ -137,6 +139,19 @@ variables:
     type: string
     required: true
 
+  cp_subnet_private:
+    title: "Control Plane subnet is private"
+    description: "Flag this if the Control Plane subnet is supposed to be private"
+    type: boolean
+
+  create_cp_subnet_allow_rule:
+    title: "Create public Control Plane allow rule"
+    description: "Create a rule to allow all traffic to reach the Control Plane"
+    type: boolean
+    visible:
+      not:
+        - ${cp_subnet_private}
+
 # WORKER SUBNET
 
   worker_subnet_cidr:
@@ -196,6 +211,11 @@ variables:
     description: "The Service subnet will host all the network appliances necessary to expose services, so Load Balancers and API Gateways"
     type: string
     required: true
+
+  service_subnet_private:
+    title: "Service Subnet is private"
+    description: "If flagged, the service subnet will be a private one, otherwise it's a public subnet"
+    type: boolean
 
 # BASTION SUBNET + BASTION MODULE
 
@@ -301,12 +321,14 @@ variables:
     description: "Compartment where to create the OCI Vault"
     type: oci:identity:compartment:id
     required: true
+    visible: ${create_vault}
 
   vault_name:
     title: "Vault Name"
     description: "Name of the Vault to create"
     type: string
     required: true
+    visible: ${create_vault}
 
 # CERTIFICATE
 

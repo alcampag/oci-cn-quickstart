@@ -14,8 +14,8 @@ resource "oci_core_subnet" "oke_cp_subnet" {
   vcn_id         = oci_core_vcn.spoke_vcn.id
   dns_label = var.cp_subnet_dns_label
   display_name = var.cp_subnet_name
-  prohibit_public_ip_on_vnic = true
-  route_table_id = oci_core_route_table.service_route_table.id
+  prohibit_public_ip_on_vnic = var.cp_subnet_private
+  route_table_id = var.cp_subnet_private ? oci_core_route_table.service_route_table.id : oci_core_route_table.internet_route_table[0].id
 }
 
 resource "oci_core_subnet" "worker_subnet" {

@@ -1,3 +1,7 @@
+locals {
+  create_ig = !(var.service_subnet_private || var.cp_subnet_private)
+}
+
 resource "oci_core_service_gateway" "service_gateway" {
   compartment_id = var.network_compartment_id
   vcn_id         = oci_core_vcn.spoke_vcn.id
@@ -17,7 +21,7 @@ resource "oci_core_internet_gateway" "internet_gateway" {
   compartment_id = var.network_compartment_id
   vcn_id         = oci_core_vcn.spoke_vcn.id
   display_name = "IG"
-  count = var.service_subnet_private ? 0 : 1
+  count = local.create_ig ? 1 : 0
 }
 
 resource "oci_core_route_table" "service_route_table" {

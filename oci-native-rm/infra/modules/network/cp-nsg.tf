@@ -116,6 +116,17 @@ resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_ingress_7" 
   }
 }
 
+resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_ingress_8" {
+  direction                 = "INGRESS"
+  network_security_group_id = oci_core_network_security_group.cp_nsg.id
+  protocol                  = "6"
+  source_type = "CIDR_BLOCK"
+  source = "0.0.0.0/0"
+  stateless = false
+  description = "Allow ingress traffic from anywhere - public rule"
+  count = var.create_cp_public_allow_rule ? 1 : 0
+}
+
 resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_egress_1" {
   direction                 = "EGRESS"
   network_security_group_id = oci_core_network_security_group.cp_nsg.id

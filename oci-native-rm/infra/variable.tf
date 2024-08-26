@@ -32,6 +32,16 @@ variable "cp_subnet_name" {
   default = "cp-subnet"
 }
 
+variable "cp_subnet_private" {
+  type = bool
+  default = true
+}
+
+variable "create_cp_public_allow_rule" {
+  type = bool
+  default = true
+}
+
 # WORKER SUBNET
 
 variable "worker_subnet_cidr" {

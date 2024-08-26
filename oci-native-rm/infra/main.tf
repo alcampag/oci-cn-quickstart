@@ -10,6 +10,8 @@ module "network" {
   cp_subnet_cidr = var.cp_subnet_cidr
   cp_subnet_dns_label = var.cp_subnet_dns_label
   cp_subnet_name = var.cp_subnet_name
+  cp_subnet_private = var.cp_subnet_private
+  create_cp_public_allow_rule = var.create_cp_public_allow_rule
   # SERVICE SUBNET
   service_subnet_cidr = var.service_subnet_cidr
   service_subnet_dns_label = var.service_subnet_dns_label
@@ -29,6 +31,8 @@ module "network" {
   bastion_subnet_dns_label = var.bastion_subnet_dns_label
   bastion_subnet_name = var.bastion_subnet_name
   bastion_subnet_private = var.bastion_subnet_private
+  # APIGW
+  create_apigw = var.create_apigw
 }
 
 module "bastion" {
