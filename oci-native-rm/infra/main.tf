@@ -33,9 +33,6 @@ module "network" {
   bastion_subnet_private = var.bastion_subnet_private
   # APIGW
   create_apigw = var.create_apigw
-  providers = {
-    oci = oci
-  }
 }
 
 module "bastion" {
