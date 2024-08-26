@@ -9,6 +9,6 @@ data "oci_containerengine_cluster_kube_config" "cluster_kube_config" {
 }
 
 data "oci_resourcemanager_private_endpoint_reachable_ip" "oke_cp_ip" {
-  private_endpoint_id = oci_resourcemanager_private_endpoint.oke_private_endpoint.id
+  private_endpoint_id = oci_resourcemanager_private_endpoint.oke_private_endpoint.0.id
   private_ip          = local.kube_private_ip
 }
