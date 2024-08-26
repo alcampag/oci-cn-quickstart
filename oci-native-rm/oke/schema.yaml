@@ -12,9 +12,6 @@ variableGroups:
     visible: false
     variables:
       - tenancy_ocid
-
-  - title: "Region"
-    variables:
       - region
 
   - title: "Network"
@@ -65,7 +62,6 @@ variables:
     dependsOn:
       compartmentId: ${network_compartment_id}
       vcnId: ${vcn_id}
-      hidePublicSubnet: true
       hideAdSubnet: true
     required: true
 
@@ -76,7 +72,6 @@ variables:
     dependsOn:
       compartmentId: ${network_compartment_id}
       vcnId: ${vcn_id}
-      hidePublicSubnet: true
       hideAdSubnet: true
     required: true
 
