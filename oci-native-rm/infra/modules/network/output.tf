@@ -43,5 +43,5 @@ output "lb_nsg_id" {
 }
 
 output "apigw_nsg_id" {
-  value = oci_core_network_security_group.apigw_nsg.id
+  value = oci_core_network_security_group.apigw_nsg.0.id
 }
