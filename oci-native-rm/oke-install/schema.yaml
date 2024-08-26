@@ -12,6 +12,7 @@ variableGroups:
     visible: false
     variables:
       - region
+      - tenancy_ocid
       - nginx_chart_version
 
   - title: "Target Cluster"

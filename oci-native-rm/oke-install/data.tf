@@ -13,3 +13,11 @@ data "oci_resourcemanager_private_endpoint_reachable_ip" "oke_cp_ip" {
   private_ip          = local.kube_private_ip
   count = local.is_cp_subnet_private ? 1 : 0
 }
+
+data "oci_identity_region_subscriptions" "home" {
+  tenancy_id = var.tenancy_ocid
+  filter {
+    name   = "is_home_region"
+    values = [true]
+  }
+}

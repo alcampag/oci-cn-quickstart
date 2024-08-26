@@ -1,4 +1,5 @@
 variable "region" {}
+variable "tenancy_ocid" {}
 variable "oke_cluster_id" {}
 variable "oke_cluster_compartment_id" {}
 variable "pe_compartment_id" {}

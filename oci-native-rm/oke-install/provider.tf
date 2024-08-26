@@ -20,10 +20,15 @@ provider "oci" {
   region = var.region
 }
 
+provider "oci" {
+  alias = "home"
+  region = one(data.oci_identity_region_subscriptions.home.region_subscriptions[*].region_name)
+}
+
 provider "helm" {
   kubernetes {
     host                   = local.cluster_endpoint
-    client_certificate = local.is_cp_subnet_private ? null : local.kube_cluster_ca_certificate
+    cluster_ca_certificate = local.is_cp_subnet_private ? null : local.kube_cluster_ca_certificate
     insecure = local.is_cp_subnet_private
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
@@ -35,7 +40,7 @@ provider "helm" {
 
 provider "kubernetes" {
   host                   = local.cluster_endpoint
-  client_certificate = local.is_cp_subnet_private ? null : local.kube_cluster_ca_certificate
+  cluster_ca_certificate = local.is_cp_subnet_private ? null : local.kube_cluster_ca_certificate
   insecure = local.is_cp_subnet_private
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"

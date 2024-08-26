@@ -27,4 +27,5 @@ resource "oci_identity_policy" "oke_native_ingress_policies" {
   name           = "oci-native-ingress-policies"
   statements = local.statements
   count = var.install_native_ingress ? 1 : 0
+  provider = oci.home
 }
