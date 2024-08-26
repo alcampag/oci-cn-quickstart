@@ -1,6 +1,6 @@
 resource "helm_release" "istio_base" {
   repository = "https://istio-release.storage.googleapis.com/charts"
-  chart = "istio/base"
+  chart = "base"
   name  = "istio-base"
   namespace = "istio-system"
   create_namespace = true
@@ -10,7 +10,7 @@ resource "helm_release" "istio_base" {
 
 resource "helm_release" "istio_control_plane" {
   repository = "https://istio-release.storage.googleapis.com/charts"
-  chart = "istio/istiod"
+  chart = "istiod"
   name  = "istiod"
   namespace = "istio-system"
   set {
@@ -24,7 +24,7 @@ resource "helm_release" "istio_control_plane" {
 
 resource "helm_release" "istio_cni" {
   repository = "https://istio-release.storage.googleapis.com/charts"
-  chart = "istio/cni"
+  chart = "cni"
   name  = "istio-cni"
   set {
     name  = "profile"
@@ -38,7 +38,7 @@ resource "helm_release" "istio_cni" {
 
 resource "helm_release" "ztunnel" {
   repository = "https://istio-release.storage.googleapis.com/charts"
-  chart = "istio/ztunnel"
+  chart = "ztunnel"
   name  = "ztunnel"
   namespace = "istio-system"
   wait = true
