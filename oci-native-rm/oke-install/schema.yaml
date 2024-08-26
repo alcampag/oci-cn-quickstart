@@ -77,7 +77,6 @@ variables:
     dependsOn:
       compartmentId: ${network_compartment_id}
       vcnId: ${oke_vcn_id}
-      hidePublicSubnet: true
     required: true
 
   worker_nsg_id:
