@@ -5,3 +5,11 @@ data "oci_identity_region_subscriptions" "home" {
     values = [true]
   }
 }
+
+data "oci_core_subnet" "lb_subnet_data" {
+  subnet_id = var.lb_subnet_id
+}
+
+data "oci_core_subnet" "cp_subnet_data" {
+  subnet_id = var.cp_subnet_id
+}

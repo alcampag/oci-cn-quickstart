@@ -1,3 +1,8 @@
+locals {
+  is_cp_subnet_private = data.oci_core_subnet.cp_subnet_data.prohibit_public_ip_on_vnic
+  is_lb_subnet_private = data.oci_core_subnet.lb_subnet_data.prohibit_public_ip_on_vnic
+}
+
 module "oke" {
   source  = "oracle-terraform-modules/oke/oci"
   version = "5.1.8"
@@ -11,8 +16,8 @@ module "oke" {
   subnets = {
     bastion = { create = "never"}
     operator = { create = "never" }
-    pub_lb = { create = "never" }
-    int_lb = { id = var.lb_subnet_id }
+    pub_lb = { id = local.is_lb_subnet_private ? null : var.lb_subnet_id }
+    int_lb = { id = local.is_lb_subnet_private ? var.lb_subnet_id : null }
     cp = { id = var.cp_subnet_id }
     workers = { id = var.worker_subnet_id }
     pods = { id = var.pod_subnet_id }
@@ -27,14 +32,14 @@ module "oke" {
     pods = { create = "never" }
   }
   network_compartment_id = var.network_compartment_id
-  assign_public_ip_to_control_plane = false
+  assign_public_ip_to_control_plane = ! local.is_cp_subnet_private
   create_vcn = false
   vcn_id = var.vcn_id
   # Network module - security
   control_plane_allowed_cidrs = var.cp_allowed_cidr_list # ["0.0.0.0/0"]
-  control_plane_is_public = false
-  load_balancers = "internal"
-  preferred_load_balancer = "internal"
+  control_plane_is_public = ! local.is_cp_subnet_private
+  load_balancers = local.is_lb_subnet_private ? "internal" : "public"
+  preferred_load_balancer = local.is_lb_subnet_private ? "internal" : "public"
   worker_is_public = false
   # Cluster module
   create_cluster = true

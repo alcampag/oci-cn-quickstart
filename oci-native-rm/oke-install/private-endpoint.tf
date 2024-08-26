@@ -5,4 +5,5 @@ resource "oci_resourcemanager_private_endpoint" "oke_private_endpoint" {
   vcn_id         = var.oke_vcn_id
   is_used_with_configuration_source_provider = false
   nsg_id_list = [var.worker_nsg_id]
+  count = local.is_cp_subnet_private ? 1 : 0
 }

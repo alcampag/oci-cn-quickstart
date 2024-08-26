@@ -23,7 +23,8 @@ provider "oci" {
 provider "helm" {
   kubernetes {
     host                   = local.cluster_endpoint
-    insecure = true
+    client_certificate = local.is_cp_subnet_private ? null : local.kube_cluster_ca_certificate
+    insecure = local.is_cp_subnet_private
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
       args        = ["ce", "cluster", "generate-token", "--cluster-id", var.oke_cluster_id, "--region", var.region]
@@ -34,7 +35,8 @@ provider "helm" {
 
 provider "kubernetes" {
   host                   = local.cluster_endpoint
-  insecure = true
+  client_certificate = local.is_cp_subnet_private ? null : local.kube_cluster_ca_certificate
+  insecure = local.is_cp_subnet_private
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
     args        = ["ce", "cluster", "generate-token", "--cluster-id", var.oke_cluster_id, "--region", var.region]
