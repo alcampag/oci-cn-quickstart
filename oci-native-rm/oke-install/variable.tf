@@ -8,8 +8,11 @@ variable "worker_nsg_id" {}
 
 # Install options
 
-
 ## Native Ingress
+variable "install_native_ingress" {
+  type = bool
+  default = true
+}
 variable "network_compartment_id" {}
 variable "certificate_compartment_id" {}
 variable "waf_compartment_id" {}
@@ -17,7 +20,13 @@ variable "policy_compartment_id" {}
 variable "lb_subnet_id" {}
 
 ## Nginx
-variable "nginx_release_name" {}
+variable "install_nginx" {
+  type = bool
+  default = true
+}
+variable "nginx_release_name" {
+  default = "nginx1"
+}
 variable "nginx_namespace" {
   default = "nginx"
 }
@@ -26,4 +35,11 @@ variable "nginx_service_type" {
 }
 variable "nginx_chart_version" {
   default = null
+}
+
+## ISTIO
+
+variable "install_istio" {
+  type = bool
+  default = false
 }

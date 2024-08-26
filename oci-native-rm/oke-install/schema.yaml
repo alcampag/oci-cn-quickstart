@@ -12,19 +12,39 @@ variableGroups:
     visible: false
     variables:
       - region
+      - nginx_chart_version
 
   - title: "Target Cluster"
     variables:
       - oke_cluster_compartment_id
       - oke_cluster_id
+      - network_compartment_id
+      - oke_vcn_id
+      - cp_subnet_id
 
   - title: "Private Endpoint"
     variables:
       - pe_compartment_id
-      - oke_vcn_id
-      - cp_subnet_id
       - worker_nsg_id
 
+  - title: "OCI Native Ingress"
+    variables:
+      - install_native_ingress
+      - policy_compartment_id
+      - certificate_compartment_id
+      - waf_compartment_id
+      - lb_subnet_id
+
+  - title: "Nginx"
+    variables:
+      - install_nginx
+      - nginx_release_name
+      - nginx_namespace
+      - nginx_service_type
+
+  - title: "Istio"
+    variables:
+      - install_istio
 
 variables:
 
@@ -88,5 +108,76 @@ variables:
       vcnId: ${oke_vcn_id}
     required: true
 
+  install_native_ingress:
+    title: "Install OCI Native Ingress"
+    description: "Install the OCI Native Ingress Controller"
+    type: boolean
 
+  policy_compartment_id:
+    title: "Policy compartment id"
+    description: "OCI Native Ingress requires some policies. This compartment must include as sub-compartments all the relevant OKE compartments"
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+    visible: ${install_native_ingress}
 
+  certificate_compartment_id:
+    title: "Certificate compartment"
+    description: "Compartment where network resources have been created for OKE"
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+    visible: ${install_native_ingress}
+
+  waf_compartment_id:
+    title: "WAF compartment"
+    description: "Compartment where WAF are placed. OCI Native Ingress needs policies to manage and attach WAF to LB"
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+    visible: ${install_native_ingress}
+
+  lb_subnet_id:
+    title: "OKE Load Balancer subnet"
+    description: "Default subnet where OCI Native Ingress will provision new LBs"
+    type: oci:core:subnet:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${oke_vcn_id}
+    required: true
+    visible: ${install_native_ingress}
+
+  install_nginx:
+    title: "Install Nginx"
+    description: "Install the Nginx Ingress Controller"
+    type: boolean
+
+  nginx_release_name:
+    title: "Nginx release name"
+    description: "Release name for the Nginx Helm Chart"
+    type: string
+    required: true
+    visible: ${install_nginx}
+
+  nginx_namespace:
+    title: "Nginx namespace"
+    description: "Namespace where the Nginx will be installed"
+    type: string
+    required: true
+    visible: ${install_nginx}
+
+  nginx_service_type:
+    title: "Nginx service type"
+    description: "Service type to expose the Nginx deployment"
+    type: enum
+    enum:
+      - ClusterIP
+      - NodePort
+      - LoadBalancer
+    required: true
+    visible: ${install_nginx}
+
+  install_istio:
+    title: "Install Istio"
+    description: "Provision Istio in Ambient Mesh mode"
+    type: boolean

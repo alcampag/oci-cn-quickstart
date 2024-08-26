@@ -31,5 +31,6 @@ resource "oci_containerengine_addon" "oci_native_ingress" {
     value = "1"
   }
   remove_addon_resources_on_delete = true
+  count = var.install_native_ingress ? 1 : 0
   depends_on = [oci_containerengine_addon.oke_cert_manager]
 }
