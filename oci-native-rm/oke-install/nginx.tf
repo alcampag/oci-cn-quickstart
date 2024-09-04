@@ -1,3 +1,7 @@
+locals {
+  nginx_service_annotations = split("/n",var.nginx_service_annotations)
+}
+
 resource "helm_release" "nginx" {
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart = "ingress-nginx"
@@ -9,9 +13,12 @@ resource "helm_release" "nginx" {
     name  = "controller.service.type"
     value = var.nginx_service_type
   }
-  set {
-    name  = "controller.service.annotations"
-    value = var.nginx_service_annotations
+  dynamic "set" {
+    for_each = local.nginx_service_annotations
+    content {
+      name = "controller.service.annotations.${replace(set.key, "." , "\\.")}"
+      value = set.value
+    }
   }
 }
 

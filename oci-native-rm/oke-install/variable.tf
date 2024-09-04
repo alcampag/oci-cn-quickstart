@@ -47,7 +47,7 @@ variable "nginx_chart_version" {
 }
 
 variable "nginx_service_annotations" {
-  default = "{oci.oraclecloud.com/load-balancer-type: \"lb\"}"
+  default = "oci.oraclecloud.com/load-balancer-type: \"lb\""
 }
 
 ## ISTIO
