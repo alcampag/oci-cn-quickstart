@@ -15,10 +15,18 @@ variable "install_native_ingress" {
   default = true
 }
 variable "network_compartment_id" {}
-variable "certificate_compartment_id" {}
-variable "waf_compartment_id" {}
-variable "policy_compartment_id" {}
-variable "lb_subnet_id" {}
+variable "certificate_compartment_id" {
+  default = null
+}
+variable "waf_compartment_id" {
+  default = null
+}
+variable "policy_compartment_id" {
+  default = null
+}
+variable "lb_subnet_id" {
+  default = null
+}
 
 ## Nginx
 variable "install_nginx" {
