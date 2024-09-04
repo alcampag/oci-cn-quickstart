@@ -45,3 +45,5 @@ resource "helm_release" "ztunnel" {
   depends_on = [helm_release.istio_cni]
   count = var.install_istio ? 1 : 0
 }
+
+# Add namespace to ambient mesh kubectl label namespace default istio.io/dataplane-mode=ambient

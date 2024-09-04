@@ -9,6 +9,10 @@ resource "helm_release" "nginx" {
     name  = "controller.service.type"
     value = var.nginx_service_type
   }
+  set {
+    name  = "controller.service.annotations"
+    value = var.nginx_service_annotations
+  }
 }
 
 

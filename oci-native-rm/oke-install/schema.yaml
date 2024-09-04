@@ -42,6 +42,7 @@ variableGroups:
       - nginx_release_name
       - nginx_namespace
       - nginx_service_type
+      - nginx_service_annotations
 
   - title: "Istio"
     variables:
@@ -175,6 +176,14 @@ variables:
       - ClusterIP
       - NodePort
       - LoadBalancer
+    required: true
+    visible: ${install_nginx}
+
+  nginx_service_annotations:
+    title: "Nginx service annotations"
+    description: "Nginx service annotations"
+    type: text
+    multiline: true
     required: true
     visible: ${install_nginx}
 
