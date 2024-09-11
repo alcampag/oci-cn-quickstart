@@ -1,3 +1,7 @@
+locals {
+  create_certificates = var.create_certificates && var.create_vault
+}
+
 module "network" {
   source = "./modules/network"
   network_compartment_id = var.network_compartment_id
@@ -93,7 +97,7 @@ module "certificate" {
   root_ca_subject_common_name = var.root_ca_subject_common_name
   oke_lb_certificate_name = var.oke_lb_certificate_name
   apigw_certificate_name = var.apigw_certificate_name
-  count = var.create_certificates ? 1 : 0
+  count = local.create_certificates ? 1 : 0
 }
 
 module "apigw" {
