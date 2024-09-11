@@ -126,6 +126,11 @@ variable "bastion_cidr_block_allow_list" {
 
 # LB + WAA
 
+variable "create_lb" {
+  type = bool
+  default = false
+}
+
 variable "lb_name" {
   default = "oke-lb"
 }

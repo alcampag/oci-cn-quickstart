@@ -1,5 +1,6 @@
 locals {
-  nginx_service_annotations = split("/n",var.nginx_service_annotations)
+  nginx_service_annotations = compact([for line in split("\n",var.nginx_service_annotations) : chomp(line)])
+  #nginx_service_annotations_set = toset({for items in local.nginx_service_annotations : split(":", items)[0] => split(":", items)[1]})
 }
 
 resource "helm_release" "nginx" {
@@ -13,11 +14,15 @@ resource "helm_release" "nginx" {
     name  = "controller.service.type"
     value = var.nginx_service_type
   }
+  set {
+    name  = "controller.service.externalTrafficPolicy"
+    value = "Local"
+  }
   dynamic "set" {
     for_each = local.nginx_service_annotations
     content {
-      name = "controller.service.annotations.${replace(set.key, "." , "\\.")}"
-      value = set.value
+      name = "controller.service.annotations.${replace(trimspace(split(":", set.value)[0]), "." , "\\.")}"
+      value = trim(trimspace(split(":", set.value)[1]), "\"")
     }
   }
 }

@@ -48,11 +48,17 @@ variableGroups:
 
   - title: "Load Balancer"
     variables:
+      - create_lb
       - lb_name
       - lb_min_bandwidth
       - lb_max_bandwidth
       - create_lb_http_redirect_rule
       - create_waa
+
+  - title: "API Gateway"
+    variables:
+      - create_apigw
+      - apigw_name
 
   - title: "DNS"
     variables:
@@ -77,11 +83,6 @@ variableGroups:
       - apigw_certificate_subject_common_name
       - oke_lb_certificate_name
       - apigw_certificate_name
-
-  - title: "API Gateway"
-    variables:
-      - create_apigw
-      - apigw_name
 
 variables:
 
@@ -262,11 +263,17 @@ variables:
 
 # LOAD BALANCER
 
+  create_lb:
+    title: "Create Load Balancer"
+    description: "Create a Load Balancer for OKE"
+    type: boolean
+
   lb_name:
     title: "Load Balancer Name"
     description: "Name of the Load Balancer that will be used by OKE to expose pods"
     type: string
     required: true
+    visible: ${create_lb}
 
   lb_min_bandwidth:
     title: "Load Balancer minimum bandwidth"
@@ -274,6 +281,7 @@ variables:
     type: integer
     minimum: 10
     required: true
+    visible: ${create_lb}
 
   lb_max_bandwidth:
     title: "Load Balancer maximum bandwidth"
@@ -281,16 +289,33 @@ variables:
     type: integer
     minimum: 10
     required: true
+    visible: ${create_lb}
 
   create_lb_http_redirect_rule:
     title: "Create HTTP redirect rule"
     description: "If flagged, a rule set will be created on the Load Balancer to redirect all HTTP traffic to HTTPS"
     type: boolean
+    visible: ${create_lb}
 
   create_waa:
     title: "Create Web Application Acceleration"
     description: "Create a Web Application Acceleration Policy and attach it to the Load Balancer"
     type: boolean
+    visible: ${create_lb}
+
+# APIGW
+
+  create_apigw:
+    title: "Create API Gateway"
+    description: "Create an API Gateway. Configure it later so that it points to the OKE Load Balancer as backend"
+    type: boolean
+
+  apigw_name:
+    title: "API Gateway Name"
+    description: "Name of the API Gateway"
+    type: string
+    required: true
+    visible: ${create_apigw}
 
 # DNS
 
@@ -369,39 +394,37 @@ variables:
     description: "Subject Common Name of the OKE Load Balancer certificate"
     type: string
     required: true
-    visible: ${create_certificates}
+    visible:
+      and:
+        - ${create_certificates}
+        - ${create_lb}
 
   apigw_certificate_subject_common_name:
     title: "API Gateway certificate Subject Common Name"
     description: "Subject Common Name of the API Gateway certificate"
     type: string
     required: true
-    visible: ${create_certificates}
+    visible:
+      and:
+        - ${create_certificates}
+        - ${create_apigw}
 
   oke_lb_certificate_name:
     title: "OKE Load Balancer certificate name"
     description: "Certificate name for the OKE Load Balancer"
     type: string
     required: true
-    visible: ${create_certificates}
+    visible:
+      and:
+        - ${create_certificates}
+        - ${create_lb}
 
   apigw_certificate_name:
     title: "API Gateway certificate name"
     description: "Certificate name for the API Gateway"
     type: string
     required: true
-    visible: ${create_certificates}
-
-# APIGW
-
-  create_apigw:
-    title: "Create API Gateway"
-    description: "Create an API Gateway. Configure it later so that it points to the OKE Load Balancer as backend"
-    type: boolean
-
-  apigw_name:
-    title: "API Gateway Name"
-    description: "Name of the API Gateway"
-    type: string
-    required: true
-    visible: ${create_apigw}
+    visible:
+      and:
+        - ${create_certificates}
+        - ${create_apigw}

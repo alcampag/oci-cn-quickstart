@@ -57,6 +57,7 @@ module "lb" {
   is_private = var.service_subnet_private
   create_lb_http_redirect_rule = var.create_lb_http_redirect_rule
   create_waa = var.create_waa
+  count = var.create_lb ? 1 : 0
 }
 
 module "dns" {
