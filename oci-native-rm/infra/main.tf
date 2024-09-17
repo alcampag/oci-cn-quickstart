@@ -35,6 +35,11 @@ module "network" {
   bastion_subnet_dns_label = var.bastion_subnet_dns_label
   bastion_subnet_name = var.bastion_subnet_name
   bastion_subnet_private = var.bastion_subnet_private
+  # FSS SUBNET
+  create_fss = var.create_fss
+  fss_subnet_cidr = var.fss_subnet_cidr
+  fss_subnet_dns_label = var.fss_subnet_dns_label
+  fss_subnet_name = var.fss_subnet_name
   # APIGW
   create_apigw = var.create_apigw
 }

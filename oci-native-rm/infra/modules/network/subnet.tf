@@ -50,3 +50,14 @@ resource "oci_core_subnet" "bastion_subnet" {
   count = var.create_bastion ? 1 : 0
 }
 
+resource "oci_core_subnet" "fss_subnet" {
+  cidr_block     = var.fss_subnet_cidr
+  compartment_id = var.network_compartment_id
+  vcn_id         = oci_core_vcn.spoke_vcn.id
+  dns_label = var.fss_subnet_dns_label
+  display_name = var.fss_subnet_name
+  prohibit_public_ip_on_vnic = true
+  route_table_id = oci_core_route_table.service_route_table.id
+  count = var.create_fss ? 1 : 0
+}
+

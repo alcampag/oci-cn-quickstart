@@ -80,6 +80,57 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress
   }
 }
 
+resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress_7" {
+  direction                 = "INGRESS"
+  network_security_group_id = oci_core_network_security_group.worker_nsg.id
+  protocol                  = "17"  # UDP
+  source_type = "NETWORK_SECURITY_GROUP"
+  source = oci_core_network_security_group.fss_nsg.0.id
+  stateless = false
+  description = "Allow UDP ingress to workers for NFS portmapper from FSS mounts"
+  udp_options {
+    source_port_range {
+      max = 111
+      min = 111
+    }
+  }
+  count = var.create_fss ? 1 : 0
+}
+
+resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress_8" {
+  direction                 = "INGRESS"
+  network_security_group_id = oci_core_network_security_group.worker_nsg.id
+  protocol                  = "6"
+  source_type = "NETWORK_SECURITY_GROUP"
+  source = oci_core_network_security_group.fss_nsg.0.id
+  stateless = false
+  description = "Allow TCP ingress to workers for NFS portmapper from FSS mounts"
+  tcp_options {
+    source_port_range {
+      max = 111
+      min = 111
+    }
+  }
+  count = var.create_fss ? 1 : 0
+}
+
+resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress_9" {
+  direction                 = "INGRESS"
+  network_security_group_id = oci_core_network_security_group.worker_nsg.id
+  protocol                  = "6"
+  source_type = "NETWORK_SECURITY_GROUP"
+  source = oci_core_network_security_group.fss_nsg.0.id
+  stateless = false
+  description = "Allow TCP ingress to workers for NFS from FSS mounts"
+  tcp_options {
+    source_port_range {
+      max = 2048
+      min = 2050
+    }
+  }
+  count = var.create_fss ? 1 : 0
+}
+
 resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_1" {
   direction                 = "EGRESS"
   network_security_group_id = oci_core_network_security_group.worker_nsg.id
@@ -180,4 +231,72 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_
     type = 3
     code = 4
   }
+}
+
+resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_9" {
+  direction                 = "EGRESS"
+  network_security_group_id = oci_core_network_security_group.worker_nsg.id
+  protocol                  = "17"  # UDP
+  destination_type = "NETWORK_SECURITY_GROUP"
+  destination = oci_core_network_security_group.fss_nsg.0.id
+  stateless = false
+  description = "Allow UDP egress from workers for NFS portmapper to FSS mounts"
+  udp_options {
+    source_port_range {
+      max = 111
+      min = 111
+    }
+  }
+  count = var.create_fss ? 1 : 0
+}
+
+resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_10" {
+  direction                 = "EGRESS"
+  network_security_group_id = oci_core_network_security_group.worker_nsg.id
+  protocol                  = "6"
+  destination_type = "NETWORK_SECURITY_GROUP"
+  destination = oci_core_network_security_group.fss_nsg.0.id
+  stateless = false
+  description = "Allow TCP egress from workers for NFS portmapper to FSS mounts"
+  tcp_options {
+    source_port_range {
+      max = 111
+      min = 111
+    }
+  }
+  count = var.create_fss ? 1 : 0
+}
+
+resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_11" {
+  direction                 = "EGRESS"
+  network_security_group_id = oci_core_network_security_group.worker_nsg.id
+  protocol                  = "6"
+  destination_type = "NETWORK_SECURITY_GROUP"
+  destination = oci_core_network_security_group.fss_nsg.0.id
+  stateless = false
+  description = "Allow TCP egress from workers for NFS to FSS mounts"
+  tcp_options {
+    source_port_range {
+      max = 2048
+      min = 2050
+    }
+  }
+  count = var.create_fss ? 1 : 0
+}
+
+resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_12" {
+  direction                 = "EGRESS"
+  network_security_group_id = oci_core_network_security_group.worker_nsg.id
+  protocol                  = "17"  # UDP
+  destination_type = "NETWORK_SECURITY_GROUP"
+  destination = oci_core_network_security_group.fss_nsg.0.id
+  stateless = false
+  description = "Allow UDP egress from workers for NFS to FSS mounts"
+  udp_options {
+    source_port_range {
+      max = 2048
+      min = 2048
+    }
+  }
+  count = var.create_fss ? 1 : 0
 }

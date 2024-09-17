@@ -87,6 +87,18 @@ variable "bastion_subnet_dns_label" {
 variable "bastion_subnet_name" {
 }
 
+# FSS
+
+variable "create_fss" {
+  type = bool
+}
+
+variable "fss_subnet_cidr" {}
+
+variable "fss_subnet_dns_label" {}
+
+variable "fss_subnet_name" {}
+
 # APIGW
 
 variable "create_apigw" {

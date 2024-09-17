@@ -36,6 +36,10 @@ variableGroups:
       - service_subnet_cidr
       - service_subnet_dns_label
       - service_subnet_private
+      - create_fss
+      - fss_subnet_name
+      - fss_subnet_cidr
+      - fss_subnet_dns_label
 
   - title: "Bastion"
     variables:
@@ -216,6 +220,31 @@ variables:
     title: "Service Subnet is private"
     description: "If flagged, the service subnet will be a private one, otherwise it's a public subnet"
     type: boolean
+
+# FSS SUBNET
+
+  create_fss:
+    title: "Create FSS subnet"
+    description: "Create a subnet for the File System Storage service"
+    type: boolean
+
+  fss_subnet_name:
+    title: "FSS subnet name"
+    description: "Name of the FSS subnet to create"
+    required: true
+    visible: ${create_fss}
+
+  fss_subnet_cidr:
+    title: "FSS subnet CIDR"
+    description: "CIDR block for the FSS subnet"
+    required: true
+    visible: ${create_fss}
+
+  fss_subnet_dns_label:
+    title: "FSS subnet DNS label"
+    description: "DNS label for the FSS subnet"
+    required: true
+    visible: ${create_fss}
 
 # BASTION SUBNET + BASTION MODULE
 
