@@ -66,8 +66,8 @@ resource "oci_core_network_security_group_security_rule" "fss_ingress_rule_4" {
   description = "Allow TCP ingress for NFS from workers"
   tcp_options {
     source_port_range {
-      max = 2048
-      min = 2050
+      max = 2050
+      min = 2048
     }
   }
   count = var.create_fss ? 1 : 0
@@ -117,8 +117,8 @@ resource "oci_core_network_security_group_security_rule" "fss_egress_rule_3" {
   description = "Allow TCP egress for NFS to the workers"
   tcp_options {
     source_port_range {
-      max = 2048
-      min = 2050
+      max = 2050
+      min = 2048
     }
   }
   count = var.create_fss ? 1 : 0
