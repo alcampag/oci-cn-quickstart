@@ -17,6 +17,7 @@ variableGroups:
   - title: "Network"
     variables:
       - network_compartment_id
+      - cni_type
       - vcn_id
       - lb_subnet_id
       - cp_subnet_id
@@ -45,6 +46,15 @@ variables:
     description: "Compartments where the network resources for OKE are present"
     type: oci:identity:compartment:id
     default: ${compartment_ocid}
+    required: true
+
+  cni_type:
+    title: "CNI Type"
+    description: "CNI to use for the OKE cluster"
+    type: enum
+    enum:
+      - npn
+      - flannel
     required: true
 
   vcn_id:

@@ -4,6 +4,9 @@ variable "region" {}
 # NETWORK
 
 variable "network_compartment_id" {}
+variable "cni_type" {
+  default = "npn"
+}
 variable "vcn_id" {}
 variable "lb_subnet_id" {}
 variable "cp_subnet_id" {}

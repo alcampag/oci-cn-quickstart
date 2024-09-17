@@ -1,6 +1,7 @@
 locals {
   is_cp_subnet_private = data.oci_core_subnet.cp_subnet_data.prohibit_public_ip_on_vnic
   is_lb_subnet_private = data.oci_core_subnet.lb_subnet_data.prohibit_public_ip_on_vnic
+  is_flannel = var.cni_type == "flannel"
 }
 
 module "oke" {
@@ -20,7 +21,7 @@ module "oke" {
     int_lb = { id = local.is_lb_subnet_private ? var.lb_subnet_id : null }
     cp = { id = var.cp_subnet_id }
     workers = { id = var.worker_subnet_id }
-    pods = { id = var.pod_subnet_id }
+    pods = { id = local.is_flannel ? null : var.pod_subnet_id }
   }
   nsgs = {
     bastion = { create = "never" }
@@ -46,7 +47,7 @@ module "oke" {
   cluster_kms_key_id = null
   cluster_name = var.cluster_name
   cluster_type = "enhanced"
-  cni_type = "npn"
+  cni_type = var.cni_type
   kubernetes_version = var.kubernetes_version
   services_cidr      = "10.96.0.0/16"
   use_signed_images  = false
