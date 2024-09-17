@@ -193,18 +193,30 @@ variables:
     description: "CIDR block for OKE pods"
     type: string
     required: true
+    visible:
+      eq:
+        - ${cni_type}
+        - npn
 
   pod_subnet_dns_label:
     title: "Pod subnet DNS label"
     description: "DNS label for the Pod subnet"
     type: string
     required: true
+    visible:
+      eq:
+        - ${cni_type}
+        - npn
 
   pod_subnet_name:
     title: "Pod subnet name"
     description: "OKE pods will have an IP address assigned from this subnet"
     type: string
     required: true
+    visible:
+      eq:
+        - ${cni_type}
+        - npn
 
 # SERVICE SUBNET
 

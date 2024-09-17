@@ -11,7 +11,9 @@ variable "vcn_id" {}
 variable "lb_subnet_id" {}
 variable "cp_subnet_id" {}
 variable "worker_subnet_id" {}
-variable "pod_subnet_id" {}
+variable "pod_subnet_id" {
+  default = null
+}
 variable "cp_nsg_id" {}
 variable "cp_allowed_cidr_list" {
   type = list(string)
