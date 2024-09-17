@@ -157,7 +157,7 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_
   network_security_group_id = oci_core_network_security_group.worker_nsg.id
   protocol                  = "all"
   destination_type = "NETWORK_SECURITY_GROUP"
-  destination = oci_core_network_security_group.pod_nsg.id
+  destination = oci_core_network_security_group.pod_nsg.0.id
   stateless = false
   description = "Allow ALL egress from workers to pods"
   count = local.create_pod ? 1 : 0
