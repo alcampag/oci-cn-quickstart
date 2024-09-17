@@ -124,8 +124,8 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress
   description = "Allow TCP ingress to workers for NFS from FSS mounts"
   tcp_options {
     source_port_range {
-      max = 2048
-      min = 2050
+      max = 2050
+      min = 2048
     }
   }
   count = var.create_fss ? 1 : 0
