@@ -9,7 +9,7 @@ output "cp_subnet_id" {
 }
 
 output "pod_subnet_id" {
-  value = oci_core_subnet.pods_subnet.id
+  value = local.create_pod ? oci_core_subnet.pods_subnet.0.id : null
 }
 
 output "worker_subnet_id" {
@@ -31,7 +31,7 @@ output "cp_nsg_id" {
 }
 
 output "pod_nsg_id" {
-  value = oci_core_network_security_group.pod_nsg.id
+  value = local.create_pod ? oci_core_network_security_group.pod_nsg.0.id : null
 }
 
 output "worker_nsg_id" {
