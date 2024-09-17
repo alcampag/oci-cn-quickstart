@@ -106,6 +106,10 @@ variables:
       hidePublicSubnet: true
       hideAdSubnet: true
     required: true
+    visible:
+      eq:
+        - ${cni_type}
+        - npn
 
   cp_nsg_id:
     title: "Control Plane NSG"
