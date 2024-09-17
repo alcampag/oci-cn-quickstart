@@ -6,6 +6,7 @@ module "network" {
   source = "./modules/network"
   network_compartment_id = var.network_compartment_id
   region = var.region
+  cni_type = var.cni_type
   # VCN
   vcn_name = var.vcn_name
   vcn_cidr_blocks = var.vcn_cidr_blocks

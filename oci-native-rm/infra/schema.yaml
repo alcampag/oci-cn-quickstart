@@ -21,6 +21,7 @@ variableGroups:
       - vcn_name
       - vcn_cidr_blocks
       - vcn_dns_label
+      - cni_type
       - cp_subnet_name
       - cp_subnet_cidr
       - cp_subnet_dns_label
@@ -99,6 +100,15 @@ variables:
     title: "Network Compartment"
     description: "All resources in this section will be created within the compartment chosen"
     type: oci:identity:compartment:id
+    required: true
+
+  cni_type:
+    title: "CNI Type"
+    description: "CNI to use for the OKE cluster"
+    type: enum
+    enum:
+      - npn
+      - flannel
     required: true
 
 # VCN

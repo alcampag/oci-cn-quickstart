@@ -3,6 +3,9 @@ variable "region" {}
 variable "compartment_ocid" {}
 variable "network_compartment_id" {}
 
+variable "cni_type" {
+  default = "npn"
+}
 
 # VCN
 variable "vcn_name" {
