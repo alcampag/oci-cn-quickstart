@@ -116,7 +116,7 @@ variable "create_fss" {
 }
 
 variable "fss_subnet_cidr" {
-  default = "10.1.0.32/27"
+  default = "10.1.0.64/26"
 }
 
 variable "fss_subnet_dns_label" {
