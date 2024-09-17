@@ -1,3 +1,4 @@
+
 resource "oci_core_subnet" "service_subnet" {
   cidr_block     = var.service_subnet_cidr
   compartment_id = var.network_compartment_id
@@ -36,6 +37,7 @@ resource "oci_core_subnet" "pods_subnet" {
   display_name = var.pod_subnet_name
   prohibit_public_ip_on_vnic = true
   route_table_id = oci_core_route_table.nat_route_table.id
+  count = local.create_pod ? 1 : 0
 }
 
 resource "oci_core_subnet" "bastion_subnet" {

@@ -1,6 +1,13 @@
 variable "region" {}
 variable "network_compartment_id" {}
 
+# CNI TYPE
+
+variable "cni_type" {}
+
+
+# VCN
+
 variable "vcn_name" {
 }
 

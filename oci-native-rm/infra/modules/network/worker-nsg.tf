@@ -19,9 +19,10 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress
   network_security_group_id = oci_core_network_security_group.worker_nsg.id
   protocol                  = "all"
   source_type = "NETWORK_SECURITY_GROUP"
-  source = oci_core_network_security_group.pod_nsg.id
+  source = oci_core_network_security_group.pod_nsg.0.id
   stateless = false
   description = "Allow ALL ingress to workers from pods"
+  count = local.create_pod ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress_3" {
@@ -159,6 +160,7 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_
   destination = oci_core_network_security_group.pod_nsg.id
   stateless = false
   description = "Allow ALL egress from workers to pods"
+  count = local.create_pod ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_4" {
