@@ -11,4 +11,5 @@ resource "oci_core_default_security_list" "lockdown" {
   lifecycle {
     ignore_changes = [egress_security_rules, ingress_security_rules, defined_tags]
   }
+  count = var.create_vcn ? 1 : 0
 }
