@@ -134,6 +134,7 @@ variables:
     description: "Name of the VCN to create"
     type: string
     required: true
+    visible: ${create_vcn}
 
   vcn_cidr_blocks:
     title: "VCN CIDR blocks"
@@ -142,12 +143,14 @@ variables:
     items:
       type: string
     required: true
+    visible: ${create_vcn}
 
   vcn_dns_label:
     title: "VCN DNS name"
     description: "This dns label will be present by default whenever a new instance is created in the VCN"
     type: string
     required: true
+    visible: ${create_vcn}
 
 # CP SUBNET
 
