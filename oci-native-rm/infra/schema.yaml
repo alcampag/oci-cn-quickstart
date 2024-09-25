@@ -18,6 +18,8 @@ variableGroups:
   - title: "Network"
     variables:
       - network_compartment_id
+      - create_vcn
+      - vcn_id
       - vcn_name
       - vcn_cidr_blocks
       - vcn_dns_label
@@ -112,6 +114,20 @@ variables:
     required: true
 
 # VCN
+
+  create_vcn:
+    title: "Create VCN"
+    description: "If flagged, this Terraform module will create a VCN"
+    type: boolean
+
+  vcn_id:
+    title: "Existing VCN"
+    type: oci:core:vcn:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+    visible:
+      not:
+        - ${create_vcn}
 
   vcn_name:
     title: "VCN Name"

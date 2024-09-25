@@ -8,6 +8,15 @@ variable "cni_type" {
 }
 
 # VCN
+variable "create_vcn" {
+  type = bool
+  default = true
+}
+
+variable "vcn_id" {
+  default = null
+}
+
 variable "vcn_name" {
   default = "vcn-spoke-1"
 }

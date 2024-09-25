@@ -2,7 +2,7 @@
 resource "oci_core_subnet" "service_subnet" {
   cidr_block     = var.service_subnet_cidr
   compartment_id = var.network_compartment_id
-  vcn_id         = oci_core_vcn.spoke_vcn.id
+  vcn_id         = local.vcn_id
   prohibit_public_ip_on_vnic = var.service_subnet_private
   dns_label = var.service_subnet_dns_label
   display_name = var.service_subnet_name
@@ -12,7 +12,7 @@ resource "oci_core_subnet" "service_subnet" {
 resource "oci_core_subnet" "oke_cp_subnet" {
   cidr_block     = var.cp_subnet_cidr
   compartment_id = var.network_compartment_id
-  vcn_id         = oci_core_vcn.spoke_vcn.id
+  vcn_id         = local.vcn_id
   dns_label = var.cp_subnet_dns_label
   display_name = var.cp_subnet_name
   prohibit_public_ip_on_vnic = var.cp_subnet_private
@@ -22,7 +22,7 @@ resource "oci_core_subnet" "oke_cp_subnet" {
 resource "oci_core_subnet" "worker_subnet" {
   cidr_block     = var.worker_subnet_cidr
   compartment_id = var.network_compartment_id
-  vcn_id         = oci_core_vcn.spoke_vcn.id
+  vcn_id         = local.vcn_id
   dns_label = var.worker_subnet_dns_label
   display_name = var.worker_subnet_name
   prohibit_public_ip_on_vnic = true
@@ -32,7 +32,7 @@ resource "oci_core_subnet" "worker_subnet" {
 resource "oci_core_subnet" "pods_subnet" {
   cidr_block     = var.pod_subnet_cidr
   compartment_id = var.network_compartment_id
-  vcn_id         = oci_core_vcn.spoke_vcn.id
+  vcn_id         = local.vcn_id
   dns_label = var.pod_subnet_dns_label
   display_name = var.pod_subnet_name
   prohibit_public_ip_on_vnic = true
@@ -43,7 +43,7 @@ resource "oci_core_subnet" "pods_subnet" {
 resource "oci_core_subnet" "bastion_subnet" {
   cidr_block     = var.bastion_subnet_cidr
   compartment_id = var.network_compartment_id
-  vcn_id         = oci_core_vcn.spoke_vcn.id
+  vcn_id         = local.vcn_id
   dns_label = var.bastion_subnet_dns_label
   display_name = var.bastion_subnet_name
   prohibit_public_ip_on_vnic = var.bastion_subnet_private
@@ -55,7 +55,7 @@ resource "oci_core_subnet" "bastion_subnet" {
 resource "oci_core_subnet" "fss_subnet" {
   cidr_block     = var.fss_subnet_cidr
   compartment_id = var.network_compartment_id
-  vcn_id         = oci_core_vcn.spoke_vcn.id
+  vcn_id         = local.vcn_id
   dns_label = var.fss_subnet_dns_label
   display_name = var.fss_subnet_name
   prohibit_public_ip_on_vnic = true

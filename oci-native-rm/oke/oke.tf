@@ -29,8 +29,8 @@ module "oke" {
     pub_lb = {create = "never" }
     int_lb = { create = "never"}
     cp = { id = var.cp_nsg_id }
-    workers = { create = "never" }
-    pods = { create = "never" }
+    workers = { create = "never" } # provide NSG ID if you want to manage node pools using this module
+    pods = { create = "never" }  # provide NSG ID if you want to manage node pools using this module and you are using OCI_VCN_NATIVE CNI
   }
   network_compartment_id = var.network_compartment_id
   assign_public_ip_to_control_plane = ! local.is_cp_subnet_private

@@ -1,6 +1,6 @@
 resource "oci_core_security_list" "bastion_security_list" {
   compartment_id = var.network_compartment_id
-  vcn_id         = oci_core_vcn.spoke_vcn.id
+  vcn_id         = local.vcn_id
   display_name = "bastion-sec-list"
   ingress_security_rules {
     protocol = "6"

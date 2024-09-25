@@ -8,6 +8,8 @@ module "network" {
   region = var.region
   cni_type = var.cni_type
   # VCN
+  create_vcn = var.create_vcn
+  vcn_id = var.vcn_id
   vcn_name = var.vcn_name
   vcn_cidr_blocks = var.vcn_cidr_blocks
   vcn_dns_label = var.vcn_dns_label

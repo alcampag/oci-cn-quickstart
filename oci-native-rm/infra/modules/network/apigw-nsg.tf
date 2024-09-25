@@ -1,6 +1,6 @@
 resource "oci_core_network_security_group" "apigw_nsg" {
   compartment_id = var.network_compartment_id
-  vcn_id         = oci_core_vcn.spoke_vcn.id
+  vcn_id         = local.vcn_id
   display_name = "apigw-nsg"
   count = var.create_apigw ? 1 : 0
 }

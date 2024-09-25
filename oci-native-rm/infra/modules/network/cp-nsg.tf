@@ -1,6 +1,6 @@
 resource "oci_core_network_security_group" "cp_nsg" {
   compartment_id = var.network_compartment_id
-  vcn_id         = oci_core_vcn.spoke_vcn.id
+  vcn_id         = local.vcn_id
   display_name = "cp-nsg"
 }
 

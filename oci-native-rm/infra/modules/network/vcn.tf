@@ -3,6 +3,7 @@ resource "oci_core_vcn" "spoke_vcn" {
   display_name = var.vcn_name
   cidr_blocks = var.vcn_cidr_blocks
   dns_label = var.vcn_dns_label
+  count = var.create_vcn ? 1 : 0
 }
 
 resource "oci_core_default_security_list" "lockdown" {

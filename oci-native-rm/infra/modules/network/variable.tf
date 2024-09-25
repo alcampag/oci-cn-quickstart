@@ -8,6 +8,12 @@ variable "cni_type" {}
 
 # VCN
 
+variable "create_vcn" {
+  type = bool
+}
+
+variable "vcn_id" {}
+
 variable "vcn_name" {
 }
 

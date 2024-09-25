@@ -1,5 +1,5 @@
 output "vcn_id" {
-  value = oci_core_vcn.spoke_vcn.id
+  value = local.vcn_id
 }
 
 # SUBNETS
