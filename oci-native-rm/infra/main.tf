@@ -79,6 +79,7 @@ module "dns" {
   vcn_id = module.network.vcn_id
   custom_private_view_name = var.custom_private_view_name
   vcn_custom_private_zone_domain_names = var.vcn_custom_private_zone_domain_names
+  count = var.create_private_dns_view ? 1 : 0
 }
 
 module "vault" {

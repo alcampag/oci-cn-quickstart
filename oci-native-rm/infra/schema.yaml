@@ -69,6 +69,7 @@ variableGroups:
 
   - title: "DNS"
     variables:
+      - create_private_dns_view
       - custom_private_view_name
       - vcn_custom_private_zone_domain_names
 
@@ -389,11 +390,16 @@ variables:
 
 # DNS
 
+  create_private_dns_view:
+    title: "Create Private DNS"
+    type: boolean
+
   custom_private_view_name:
     title: "Custom DNS Name - Private View"
     description: "Name of the Private View for the custom DNS names"
     type: string
     required: true
+    visible: ${create_private_dns_view}
 
   vcn_custom_private_zone_domain_names:
     title: "Custom Private Zone Domain Names"
@@ -402,6 +408,7 @@ variables:
     items:
       type: string
     required: true
+    visible: ${create_private_dns_view}
 
 # VAULT
 

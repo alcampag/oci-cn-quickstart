@@ -187,6 +187,11 @@ variable "create_waa" {
 
 # DNS PRIVATE VIEW
 
+variable "create_private_dns_view" {
+  type = bool
+  default = false
+}
+
 variable "custom_private_view_name" {
   default = "np-oci-acme-tst"
 }
