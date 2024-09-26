@@ -7,7 +7,7 @@ resource "oci_core_vcn" "spoke_vcn" {
 }
 
 resource "oci_core_default_security_list" "lockdown" {
-  manage_default_resource_id = oci_core_vcn.spoke_vcn.default_security_list_id
+  manage_default_resource_id = oci_core_vcn.spoke_vcn.0.default_security_list_id
   lifecycle {
     ignore_changes = [egress_security_rules, ingress_security_rules, defined_tags]
   }
