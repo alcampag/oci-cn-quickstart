@@ -126,6 +126,7 @@ variables:
     type: oci:core:vcn:id
     dependsOn:
       compartmentId: ${network_compartment_id}
+    required: true
     visible:
       not:
         - ${create_vcn}
