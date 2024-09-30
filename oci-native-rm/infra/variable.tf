@@ -14,6 +14,7 @@ variable "create_vcn" {
 }
 
 variable "vcn_id" {
+  default = null
 }
 
 variable "vcn_name" {
