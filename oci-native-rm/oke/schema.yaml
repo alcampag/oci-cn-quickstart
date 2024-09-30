@@ -31,6 +31,9 @@ variableGroups:
       - oke_compartment_id
       - cluster_name
       - kubernetes_version
+      - cluster_type
+      - services_cidr
+      - pods_cidr
 
 variables:
 
@@ -151,3 +154,28 @@ variables:
     dependsOn:
       compartmentId: ${oke_compartment_id}
       clusterOptionId: "all"
+
+  cluster_type:
+    title: "OKE cluster type"
+    description: "Enhanced clusters are recommended"
+    type: enum
+    enum:
+      - enhanced
+      - basic
+    required: true
+
+  services_cidr:
+    title: "Services CIDR"
+    description: "Internal Kubernetes services CIDR block. Must not overlap with any VCN CIDR block"
+    type: string
+    required: true
+
+  pods_cidr:
+    title: "Pods CIDR"
+    description: "Internal Pod CIDR block. Must not overlap with any VCN CIDR block"
+    type: string
+    required: true
+    visible:
+      eq:
+        - ${cni_type}
+        - flannel

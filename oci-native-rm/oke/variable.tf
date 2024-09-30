@@ -28,3 +28,15 @@ variable "cluster_name" {
   default = "oke-rm-quickstart"
 }
 variable "kubernetes_version" {}
+
+variable "cluster_type" {
+  default = "enhanced"
+}
+
+variable "services_cidr" {
+  default = "10.96.0.0/16"
+}
+
+variable "pods_cidr" {
+  default = "10.244.0.0/16"
+}

@@ -46,10 +46,11 @@ module "oke" {
   create_cluster = true
   cluster_kms_key_id = null
   cluster_name = var.cluster_name
-  cluster_type = "enhanced"
+  cluster_type = var.cluster_type
   cni_type = var.cni_type
   kubernetes_version = var.kubernetes_version
-  services_cidr      = "10.96.0.0/16"
+  services_cidr      = var.services_cidr
+  pods_cidr = var.pods_cidr
   use_signed_images  = false
   use_defined_tags = false
 
