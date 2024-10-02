@@ -1,9 +1,0 @@
-variable "service_subnet_id" {}
-variable "oke_cp_subnet_id" {}
-variable "worker_subnet_id" {}
-variable "pod_subnet_id" {}
-variable "region" {}
-variable "lb_nsg_id" {}
-variable "cp_nsg_id" {}
-variable "worker_nsg_id" {}
-variable "pod_nsg_id" {}
