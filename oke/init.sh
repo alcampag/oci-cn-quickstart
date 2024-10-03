@@ -18,5 +18,5 @@ if [ -z "$compartment_id" ]; then
         exit 1
 fi
 
-tofu init || exit
-tofu apply -var="tenancy_ocid=$OCI_TENANCY" -var="region=$OCI_REGION" -var="compartment_ocid=$compartment_id" || exit
+terraform init || exit
+terraform apply -var="tenancy_ocid=$OCI_TENANCY" -var="region=$OCI_REGION" -var="compartment_ocid=$compartment_id" || exit
