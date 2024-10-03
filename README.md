@@ -26,13 +26,23 @@ Note that the input of these stacks are not validated, it is the user's responsi
 
 The first phase involves provisioning the network infrastructure for OKE. All the Terraform code here can be used as a reference:
 
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/myrepo/mydirectory/oci-native-rm/infra/release/infra_v1.zip)
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-native-rm/infra/release/infra_v1.zip)
 
 ### Phase 2: OKE Cluster provisioning
 
 This additional stack will create a OKE cluster by using the infrastructure created on phase 1.
 
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/myrepo/mydirectory/oci-native-rm/oke/release/oke_v1.zip)
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-native-rm/oke/release/oke_v1.zip)
 
 NOTE: In this stack the node pools are not created, and it is left to the user to modify this stack to include the node pools needed.
 To do this, an example of node pool creation is present in the Stack 1.
+  
+Also note that if the network infrastructure is located in a different compartment than the OKE cluster AND you are planning to use the OCI_VCN_NATIVE CNI,
+you must add these policies:
+
+```ignorelang
+Allow any-user to manage instances in tenancy where all { request.principal.type = 'cluster' }
+Allow any-user to use private-ips in tenancy where all { request.principal.type = 'cluster' }
+Allow any-user to use network-security-groups in tenancy where all { request.principal.type = 'cluster' }
+```
+For a more restrictive set of policies, see the [documentation](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengpodnetworking_topic-OCI_CNI_plugin.htm).
