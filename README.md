@@ -26,13 +26,13 @@ Note that the input of these stacks are not validated, it is the user's responsi
 
 The first phase involves provisioning the network infrastructure for OKE. All the Terraform code here can be used as a reference:
 
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/oci-native-rm/infra/release/infra_v1.zip)
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/releases/latest/download/infra_v1.zip)
 
 ### Phase 2: OKE Cluster provisioning
 
 This additional stack will create a OKE cluster by using the infrastructure created on phase 1.
 
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/oci-native-rm/oke/release/oke_v1.zip)
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/releases/latest/download/oke_v1.zip)
 
 NOTE: In this stack the node pools are not created, and it is left to the user to modify this stack to include the node pools needed.
 To do this, an example of node pool creation is present in the Stack 1.
