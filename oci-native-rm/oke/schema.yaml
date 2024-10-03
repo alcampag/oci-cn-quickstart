@@ -30,6 +30,7 @@ variableGroups:
     variables:
       - oke_compartment_id
       - cluster_name
+      - home_region
       - kubernetes_version
       - cluster_type
       - services_cidr
@@ -144,6 +145,11 @@ variables:
     title: "OKE Cluster name"
     description: "Name of the OKE cluster"
     type: string
+    required: true
+
+  home_region:
+    title: "Home Region"
+    type: oci:identity:region:name
     required: true
 
   kubernetes_version:

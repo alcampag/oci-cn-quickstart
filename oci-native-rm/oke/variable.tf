@@ -1,5 +1,6 @@
 variable "tenancy_ocid" {}
 variable "region" {}
+variable "home_region" {}
 
 # NETWORK
 
