@@ -26,6 +26,11 @@ variable "vcn_dns_label" {
 
 
 # CP SUBNET
+
+variable "create_cp_subnet" {
+  type = bool
+}
+
 variable "cp_subnet_cidr" {
 }
 
@@ -45,6 +50,10 @@ variable "create_cp_public_allow_rule" {
 
 # WORKER SUBNET
 
+variable "create_worker_subnet" {
+  type = bool
+}
+
 variable "worker_subnet_cidr" {
 }
 
@@ -56,6 +65,10 @@ variable "worker_subnet_name" {
 
 # POD SUBNET
 
+variable "create_pod_subnet" {
+  type = bool
+}
+
 variable "pod_subnet_cidr" {
 }
 
@@ -66,6 +79,10 @@ variable "pod_subnet_name" {
 }
 
 # SERVICE SUBNET
+
+variable "create_service_subnet" {
+  type = bool
+}
 
 variable "service_subnet_cidr" {
 }

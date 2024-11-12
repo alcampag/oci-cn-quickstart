@@ -24,17 +24,21 @@ variableGroups:
       - vcn_cidr_blocks
       - vcn_dns_label
       - cni_type
+      - create_cp_subnet
       - cp_subnet_name
       - cp_subnet_cidr
       - cp_subnet_dns_label
       - cp_subnet_private
       - create_cp_public_allow_rule
+      - create_worker_subnet
       - worker_subnet_name
       - worker_subnet_cidr
       - worker_subnet_dns_label
+      - create_pod_subnet
       - pod_subnet_name
       - pod_subnet_cidr
       - pod_subnet_dns_label
+      - create_service_subnet
       - service_subnet_name
       - service_subnet_cidr
       - service_subnet_dns_label
@@ -54,6 +58,7 @@ variableGroups:
       - bastion_cidr_block_allow_list
 
   - title: "Load Balancer"
+    visible: ${create_service_subnet}
     variables:
       - create_lb
       - lb_name
@@ -63,6 +68,7 @@ variableGroups:
       - create_waa
 
   - title: "API Gateway"
+    visible: ${create_service_subnet}
     variables:
       - create_apigw
       - apigw_name
@@ -156,58 +162,87 @@ variables:
 
 # CP SUBNET
 
+  create_cp_subnet:
+    title: "Create Control Plane subnet"
+    description: "If flagged, this Terraform module will create the Kubernetes Control Plane subnet"
+    type: boolean
+
   cp_subnet_cidr:
     title: "Kubernetes Control Plane Subnet CIDR"
     description: "CIDR block to allocate for Kubernetes Control Plane API Server. As it is just one endpoint, it can be small"
     type: string
     required: true
+    visible: ${create_cp_subnet}
 
   cp_subnet_dns_label:
     title: "Kubernetes Control Plane DNS label"
     description: "DNS label for the Kubernetes Control Plane subnet"
     type: string
     required: true
+    visible: ${create_cp_subnet}
 
   cp_subnet_name:
     title: "Kubernetes Control Plane subnet name"
     description: "Name of the subnet containing the Kubernetes Control Plane API Server"
     type: string
     required: true
+    visible: ${create_cp_subnet}
 
   cp_subnet_private:
     title: "Control Plane subnet is private"
     description: "Flag this if the Control Plane subnet is supposed to be private"
     type: boolean
+    visible: ${create_cp_subnet}
 
   create_cp_public_allow_rule:
     title: "Create public Control Plane allow rule"
     description: "Create a rule to allow all traffic to reach the Control Plane"
     type: boolean
     visible:
-      not:
-        - ${cp_subnet_private}
+      and:
+        - ${create_cp_subnet}
+        - not:
+            - ${cp_subnet_private}
+
 
 # WORKER SUBNET
+
+  create_worker_subnet:
+    title: "Create Worker subnet"
+    description: "If flagged, this Terraform module will create the Kubernetes Worker subnet"
+    type: boolean
 
   worker_subnet_cidr:
     title: "Worker subnet CIDR"
     description: "CIDR block for OKE worker nodes and other VM or workload like functions"
     type: string
     required: true
+    visible: ${create_worker_subnet}
 
   worker_subnet_dns_label:
     title: "Worker subnet DNS label"
     description: "DNS label for the Worker subnet"
     type: string
     required: true
+    visible: ${create_worker_subnet}
 
   worker_subnet_name:
     title: "Worker subnet name"
     description: "Name of the Worker subnet"
     type: string
     required: true
+    visible: ${create_worker_subnet}
 
 # POD SUBNET
+
+  create_pod_subnet:
+    title: "Create Pod subnet"
+    description: "If flagged, this Terraform module will create the Kubernetes Pod subnet"
+    type: boolean
+    visible:
+      eq:
+        - ${cni_type}
+        - npn
 
   pod_subnet_cidr:
     title: "Pod subnet CIDR"
@@ -215,9 +250,11 @@ variables:
     type: string
     required: true
     visible:
-      eq:
-        - ${cni_type}
-        - npn
+      and:
+        - ${create_pod_subnet}
+        - eq:
+            - ${cni_type}
+            - npn
 
   pod_subnet_dns_label:
     title: "Pod subnet DNS label"
@@ -225,9 +262,11 @@ variables:
     type: string
     required: true
     visible:
-      eq:
-        - ${cni_type}
-        - npn
+      and:
+        - ${create_pod_subnet}
+        - eq:
+            - ${cni_type}
+            - npn
 
   pod_subnet_name:
     title: "Pod subnet name"
@@ -235,34 +274,45 @@ variables:
     type: string
     required: true
     visible:
-      eq:
-        - ${cni_type}
-        - npn
+      and:
+        - ${create_pod_subnet}
+        - eq:
+            - ${cni_type}
+            - npn
 
 # SERVICE SUBNET
+
+  create_service_subnet:
+    title: "Create Service subnet"
+    description: "If flagged, this Terraform module will create the Kubernetes Service subnet"
+    type: boolean
 
   service_subnet_cidr:
     title: "Service subnet CIDR"
     description: "CIDR block for the Service subnet"
     type: string
     required: true
+    visible: ${create_service_subnet}
 
   service_subnet_dns_label:
     title: "Service subnet DNS label"
     description: "DNS label for the Service subnet"
     type: string
     required: true
+    visible: ${create_service_subnet}
 
   service_subnet_name:
     title: "Service subnet name"
     description: "The Service subnet will host all the network appliances necessary to expose services, so Load Balancers and API Gateways"
     type: string
     required: true
+    visible: ${create_service_subnet}
 
   service_subnet_private:
     title: "Service Subnet is private"
     description: "If flagged, the service subnet will be a private one, otherwise it's a public subnet"
     type: boolean
+    visible: ${create_service_subnet}
 
 # FSS SUBNET
 

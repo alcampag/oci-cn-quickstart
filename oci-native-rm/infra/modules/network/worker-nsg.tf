@@ -22,7 +22,7 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress
   source = oci_core_network_security_group.pod_nsg.0.id
   stateless = false
   description = "Allow ALL ingress to workers from pods"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress_3" {
@@ -160,7 +160,7 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_
   destination = oci_core_network_security_group.pod_nsg.0.id
   stateless = false
   description = "Allow ALL egress from workers to pods"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_4" {

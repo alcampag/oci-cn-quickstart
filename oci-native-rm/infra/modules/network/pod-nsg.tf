@@ -2,7 +2,7 @@ resource "oci_core_network_security_group" "pod_nsg" {
   compartment_id = var.network_compartment_id
   vcn_id         = local.vcn_id
   display_name = "pod-nsg"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_ingress_1" {
@@ -13,7 +13,7 @@ resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_ingress_1"
   source = oci_core_network_security_group.pod_nsg.0.id
   stateless = false
   description = "Allow ALL ingress to pods from other pods"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_ingress_2" {
@@ -24,7 +24,7 @@ resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_ingress_2"
   source = oci_core_network_security_group.worker_nsg.id
   stateless = false
   description = "Allow ALL ingress to pods for cross-node pod communication when using NodePorts or hostNetwork: true"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_ingress_3" {
@@ -35,7 +35,7 @@ resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_ingress_3"
   source = oci_core_network_security_group.cp_nsg.id
   stateless = false
   description = "Allow ALL ingress to pods from Kubernetes control plane for webhooks served by pods"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_ingress_4" {
@@ -50,7 +50,7 @@ resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_ingress_4"
     type = 3
     code = 4
   }
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "pods_nsg_rule_lb_ingress" {
@@ -61,7 +61,7 @@ resource "oci_core_network_security_group_security_rule" "pods_nsg_rule_lb_ingre
   source = oci_core_network_security_group.oke_lb_nsg.id
   stateless = true
   description = "LBs to pods, - stateless ingress"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 
@@ -73,7 +73,7 @@ resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_1" 
   destination = "0.0.0.0/0"
   stateless = false
   description = "Allow ALL egress from pods to internet"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_2" {
@@ -84,7 +84,7 @@ resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_2" 
   destination = oci_core_network_security_group.worker_nsg.id
   stateless = false
   description = "Allow ALL egress from pods for cross-node pod communication when using NodePorts or hostNetwork: true"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_3" {
@@ -95,7 +95,7 @@ resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_3" 
   destination = oci_core_network_security_group.pod_nsg.0.id
   stateless = false
   description = "Allow ALL egress from pods to other pods"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_4" {
@@ -112,7 +112,7 @@ resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_4" 
       min = 6443
     }
   }
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_5" {
@@ -123,7 +123,7 @@ resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_5" 
   destination = lookup(data.oci_core_services.all_oci_services.services[0], "cidr_block")
   stateless = false
   description = "Allow TCP egress from pods to OCI Services"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_6" {
@@ -138,7 +138,7 @@ resource "oci_core_network_security_group_security_rule" "oke_pod_nsg_egress_6" 
     type = 3
     code = 4
   }
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "pods_nsg_rule_lb_egress" {
@@ -149,5 +149,5 @@ resource "oci_core_network_security_group_security_rule" "pods_nsg_rule_lb_egres
   destination = oci_core_network_security_group.oke_lb_nsg.id
   stateless = true
   description = "Pods to LBs, - stateless egress"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }

@@ -68,7 +68,7 @@ resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_ingress_4" 
       min = 12250
     }
   }
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_ingress_5" {
@@ -85,7 +85,7 @@ resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_ingress_5" 
       min = 6443
     }
   }
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_ingress_6" {
@@ -153,7 +153,7 @@ resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_egress_2" {
   destination = oci_core_network_security_group.pod_nsg.0.id
   stateless = false
   description = "Allow TCP egress from OKE control plane to pods"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 

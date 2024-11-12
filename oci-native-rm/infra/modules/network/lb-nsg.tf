@@ -92,7 +92,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_e
   destination = oci_core_network_security_group.pod_nsg.0.id
   stateless = true
   description = "LB to pods, OCI Native Ingress - stateless egress"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_ingress" {
@@ -103,7 +103,7 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_i
   source = oci_core_network_security_group.pod_nsg.0.id
   stateless = true
   description = "LB to pods, OCI Native Ingress - stateless ingress"
-  count = local.create_pod ? 1 : 0
+  count = local.is_npn ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_apigw_egress" {

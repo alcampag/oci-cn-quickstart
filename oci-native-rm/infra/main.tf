@@ -1,6 +1,3 @@
-locals {
-  create_certificates = var.create_certificates && var.create_vault
-}
 
 module "network" {
   source = "./modules/network"
@@ -14,21 +11,25 @@ module "network" {
   vcn_cidr_blocks = var.vcn_cidr_blocks
   vcn_dns_label = var.vcn_dns_label
   # CP SUBNET
+  create_cp_subnet = var.create_cp_subnet
   cp_subnet_cidr = var.cp_subnet_cidr
   cp_subnet_dns_label = var.cp_subnet_dns_label
   cp_subnet_name = var.cp_subnet_name
   cp_subnet_private = var.cp_subnet_private
   create_cp_public_allow_rule = var.create_cp_public_allow_rule
   # SERVICE SUBNET
+  create_service_subnet = var.create_service_subnet
   service_subnet_cidr = var.service_subnet_cidr
   service_subnet_dns_label = var.service_subnet_dns_label
   service_subnet_name = var.service_subnet_name
   service_subnet_private = var.service_subnet_private
   # WORKER SUBNET
+  create_worker_subnet = var.create_worker_subnet
   worker_subnet_cidr = var.worker_subnet_cidr
   worker_subnet_dns_label = var.worker_subnet_dns_label
   worker_subnet_name = var.worker_subnet_name
   # POD SUBNET
+  create_pod_subnet = var.create_pod_subnet
   pod_subnet_cidr = var.pod_subnet_cidr
   pod_subnet_dns_label = var.pod_subnet_dns_label
   pod_subnet_name = var.pod_subnet_name
@@ -69,7 +70,7 @@ module "lb" {
   is_private = var.service_subnet_private
   create_lb_http_redirect_rule = var.create_lb_http_redirect_rule
   create_waa = var.create_waa
-  count = var.create_lb ? 1 : 0
+  count = local.create_lb ? 1 : 0
 }
 
 module "dns" {
@@ -121,5 +122,5 @@ module "apigw" {
   example_deployment_hostname = "oke.example.com"
   apigw_certificate_id = var.create_certificates ? module.certificate.0.apigw_certificate_id : null
   apigw_certificate_authority_id = var.create_certificates ? module.certificate.0.np_ca_id : null
-  count = var.create_apigw ? 1 : 0
+  count = local.create_apigw ? 1 : 0
 }
