@@ -150,6 +150,7 @@ variables:
   home_region:
     title: "Home Region"
     type: oci:identity:region:name
+    default: ${region}
     required: true
 
   kubernetes_version:

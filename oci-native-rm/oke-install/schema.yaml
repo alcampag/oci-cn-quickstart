@@ -14,10 +14,12 @@ variableGroups:
       - region
       - tenancy_ocid
       - nginx_chart_version
+      - policy_description
 
   - title: "Target Cluster"
     variables:
       - oke_cluster_compartment_id
+      - home_region
       - oke_cluster_id
       - network_compartment_id
       - oke_vcn_id
@@ -31,7 +33,6 @@ variableGroups:
   - title: "OCI Native Ingress"
     variables:
       - install_native_ingress
-      - policy_compartment_id
       - certificate_compartment_id
       - waf_compartment_id
       - lb_subnet_id
@@ -48,6 +49,12 @@ variableGroups:
     variables:
       - install_istio
 
+  - title: "Policy"
+    variables:
+      - create_policy
+      - policy_compartment_id
+      - policy_name
+
 variables:
 
   region:
@@ -59,6 +66,13 @@ variables:
     title: "OKE Cluster compartment"
     type: oci:identity:compartment:id
     default: ${compartment_ocid}
+    required: true
+
+
+  home_region:
+    title: "Home Region"
+    type: oci:identity:region:name
+    default: ${region}
     required: true
 
 
@@ -114,14 +128,6 @@ variables:
     title: "Install OCI Native Ingress"
     description: "Install the OCI Native Ingress Controller"
     type: boolean
-
-  policy_compartment_id:
-    title: "Policy compartment id"
-    description: "OCI Native Ingress requires some policies. This compartment must include as sub-compartments all the relevant OKE compartments"
-    type: oci:identity:compartment:id
-    default: ${compartment_ocid}
-    required: true
-    visible: ${install_native_ingress}
 
   certificate_compartment_id:
     title: "Certificate compartment"
@@ -191,3 +197,19 @@ variables:
     title: "Install Istio"
     description: "Provision Istio in Ambient Mesh mode"
     type: boolean
+
+
+# POLICY
+
+  create_policy:
+    title: "Create Policy"
+    description: "Flag this to create all policies necessary for OKE and its tools"
+    type: boolean
+
+  policy_compartment_id:
+    title: "Policy compartment id"
+    description: "This compartment must include all the other sub-compartments specified in this stack"
+    type: oci:identity:compartment:id
+    default: ${compartment_ocid}
+    required: true
+    visible: ${create_policy}

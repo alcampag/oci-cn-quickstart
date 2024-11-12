@@ -6,6 +6,7 @@ variable "pe_compartment_id" {}
 variable "cp_subnet_id" {}
 variable "oke_vcn_id" {}
 variable "worker_nsg_id" {}
+variable "home_region" {}
 
 # Install options
 
@@ -55,4 +56,19 @@ variable "nginx_service_annotations" {
 variable "install_istio" {
   type = bool
   default = false
+}
+
+## POLICY
+
+variable "create_policy" {
+  type = bool
+  default = true
+}
+
+variable "policy_name" {
+  default = "oke-policy"
+}
+
+variable "policy_description" {
+  default = "Policy created to enable various tools on the OKE service"
 }
