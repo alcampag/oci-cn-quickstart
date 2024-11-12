@@ -9,7 +9,7 @@ output "cp_subnet_id" {
 }
 
 output "pod_subnet_id" {
-  value = local.is_npn ? oci_core_subnet.pods_subnet.0.id : null
+  value = local.create_pod_subnet ? oci_core_subnet.pods_subnet.0.id : null
 }
 
 output "worker_subnet_id" {
