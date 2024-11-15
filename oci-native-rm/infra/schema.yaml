@@ -349,6 +349,7 @@ variables:
     title: "Create VCN Gateways"
     description: "If not flagged, the stack will reuse the VCN gateways"
     type: boolean
+    default: true
     visible:
       not:
         - ${create_vcn}
