@@ -364,10 +364,10 @@ variables:
     visible:
       and:
         - and:
-            - ${create_gateways}
+            - ${create_vcn}
             - true
         - not:
-            - ${create_vcn}
+            - ${create_gateways}
 
   nat_gateway_id:
     type: oci:core:natgateway:id
