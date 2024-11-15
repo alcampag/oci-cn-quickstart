@@ -363,7 +363,8 @@ variables:
     required: true
     visible:
       and:
-        - ${create_vcn}
+        - not:
+          - ${create_vcn}
         - not:
             - ${create_gateways}
 
@@ -376,7 +377,8 @@ variables:
     required: true
     visible:
       and:
-        - ${create_vcn}
+        - not:
+            - ${create_vcn}
         - not:
             - ${create_gateways}
 
@@ -386,7 +388,8 @@ variables:
     type: boolean
     visible:
       and:
-        - ${create_vcn}
+        - not:
+            - ${create_vcn}
         - not:
             - ${create_gateways}
 
