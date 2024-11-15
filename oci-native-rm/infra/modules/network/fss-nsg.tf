@@ -2,12 +2,11 @@ resource "oci_core_network_security_group" "fss_nsg" {
   compartment_id = var.network_compartment_id
   vcn_id         = local.vcn_id
   display_name = "fss-nsg"
-  count = var.create_fss ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "fss_ingress_rule_1" {
   direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.fss_nsg.0.id
+  network_security_group_id = oci_core_network_security_group.fss_nsg.id
   protocol                  = "17"  # UDP
   source_type = "NETWORK_SECURITY_GROUP"
   source = oci_core_network_security_group.worker_nsg.id
@@ -19,12 +18,11 @@ resource "oci_core_network_security_group_security_rule" "fss_ingress_rule_1" {
       min = 111
     }
   }
-  count = var.create_fss ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "fss_ingress_rule_2" {
   direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.fss_nsg.0.id
+  network_security_group_id = oci_core_network_security_group.fss_nsg.id
   protocol                  = "6"
   source_type = "NETWORK_SECURITY_GROUP"
   source = oci_core_network_security_group.worker_nsg.id
@@ -36,12 +34,11 @@ resource "oci_core_network_security_group_security_rule" "fss_ingress_rule_2" {
       min = 111
     }
   }
-  count = var.create_fss ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "fss_ingress_rule_3" {
   direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.fss_nsg.0.id
+  network_security_group_id = oci_core_network_security_group.fss_nsg.id
   protocol                  = "17"  # UDP
   source_type = "NETWORK_SECURITY_GROUP"
   source = oci_core_network_security_group.worker_nsg.id
@@ -53,12 +50,11 @@ resource "oci_core_network_security_group_security_rule" "fss_ingress_rule_3" {
       min = 2048
     }
   }
-  count = var.create_fss ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "fss_ingress_rule_4" {
   direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.fss_nsg.0.id
+  network_security_group_id = oci_core_network_security_group.fss_nsg.id
   protocol                  = "6"
   source_type = "NETWORK_SECURITY_GROUP"
   source = oci_core_network_security_group.worker_nsg.id
@@ -70,12 +66,11 @@ resource "oci_core_network_security_group_security_rule" "fss_ingress_rule_4" {
       min = 2048
     }
   }
-  count = var.create_fss ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "fss_egress_rule_1" {
   direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.fss_nsg.0.id
+  network_security_group_id = oci_core_network_security_group.fss_nsg.id
   protocol                  = "17"  # UDP
   destination_type = "NETWORK_SECURITY_GROUP"
   destination = oci_core_network_security_group.worker_nsg.id
@@ -87,12 +82,11 @@ resource "oci_core_network_security_group_security_rule" "fss_egress_rule_1" {
       min = 111
     }
   }
-  count = var.create_fss ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "fss_egress_rule_2" {
   direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.fss_nsg.0.id
+  network_security_group_id = oci_core_network_security_group.fss_nsg.id
   protocol                  = "6"
   destination_type = "NETWORK_SECURITY_GROUP"
   destination = oci_core_network_security_group.worker_nsg.id
@@ -104,12 +98,11 @@ resource "oci_core_network_security_group_security_rule" "fss_egress_rule_2" {
       min = 111
     }
   }
-  count = var.create_fss ? 1 : 0
 }
 
 resource "oci_core_network_security_group_security_rule" "fss_egress_rule_3" {
   direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.fss_nsg.0.id
+  network_security_group_id = oci_core_network_security_group.fss_nsg.id
   protocol                  = "6"
   destination_type = "NETWORK_SECURITY_GROUP"
   destination = oci_core_network_security_group.worker_nsg.id
@@ -121,7 +114,6 @@ resource "oci_core_network_security_group_security_rule" "fss_egress_rule_3" {
       min = 2048
     }
   }
-  count = var.create_fss ? 1 : 0
 }
 
 
