@@ -367,7 +367,7 @@ variables:
             - ${create_vcn}
 
   nat_gateway_id:
-    type: oci:core:servicegateway:id
+    type: oci:core:natgateway:id
     title: NAT Gateway
     dependsOn:
       compartmentId: ${network_compartment_id}
