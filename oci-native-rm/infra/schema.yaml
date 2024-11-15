@@ -47,6 +47,10 @@ variableGroups:
       - fss_subnet_name
       - fss_subnet_cidr
       - fss_subnet_dns_label
+      - create_gateways
+      - nat_gateway_id
+      - service_gateway_id
+      - create_internet_gateway
 
   - title: "Bastion"
     variables:
@@ -338,6 +342,52 @@ variables:
     description: "DNS label for the FSS subnet"
     required: true
     visible: ${create_fss}
+
+# VCN GATEWAYS
+
+  create_gateways:
+    title: "Create VCN Gateways"
+    description: "If not flagged, the stack will reuse the VCN gateways"
+    type: boolean
+    visible:
+      not:
+        - ${create_vcn}
+
+  service_gateway_id:
+    type: oci:core:servicegateway:id
+    title: Service Gateway
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${vcn_id}
+    required: true
+    visible:
+      and:
+        - ${create_gateways}
+        - not:
+            - ${create_vcn}
+
+  nat_gateway_id:
+    type: oci:core:servicegateway:id
+    title: NAT Gateway
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${vcn_id}
+    required: true
+    visible:
+      and:
+        - ${create_gateways}
+        - not:
+            - ${create_vcn}
+
+  create_internet_gateway:
+    title: "Create_internet_gateway"
+    description: "The stack will try to create an Internet Gateway if a public subnet is present. If not flagged, an Internet Gateway will not be created"
+    type: boolean
+    visible:
+      and:
+        - ${create_gateways}
+        - not:
+            - ${create_vcn}
 
 # BASTION SUBNET + BASTION MODULE
 

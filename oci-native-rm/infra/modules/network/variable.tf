@@ -129,6 +129,23 @@ variable "fss_subnet_dns_label" {}
 
 variable "fss_subnet_name" {}
 
+# GATEWAYS
+
+variable "create_gateways" {
+  type = bool
+}
+
+variable "service_gateway_id" {}
+
+variable "nat_gateway_id" {}
+
+variable "create_internet_gateway" {
+  type = bool
+}
+
+
+
+
 # APIGW
 
 variable "create_apigw" {

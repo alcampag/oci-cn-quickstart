@@ -159,6 +159,24 @@ variable "fss_subnet_name" {
   default = "fss-subnet"
 }
 
+variable "create_gateways" {
+  type = bool
+  default = true
+}
+
+variable "service_gateway_id" {
+  default = null
+}
+
+variable "nat_gateway_id" {
+  default = null
+}
+
+variable "create_internet_gateway" {
+  type = bool
+  default = true
+}
+
 # BASTION MODULE
 
 variable "create_bastion" {

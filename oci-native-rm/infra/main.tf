@@ -44,6 +44,11 @@ module "network" {
   fss_subnet_cidr = var.fss_subnet_cidr
   fss_subnet_dns_label = var.fss_subnet_dns_label
   fss_subnet_name = var.fss_subnet_name
+  # GATEWAYS
+  create_gateways = var.create_gateways
+  nat_gateway_id = var.nat_gateway_id
+  service_gateway_id = var.service_gateway_id
+  create_internet_gateway = var.create_internet_gateway
   # APIGW
   create_apigw = var.create_apigw
 }
