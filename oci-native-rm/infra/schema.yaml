@@ -379,10 +379,10 @@ variables:
     visible:
       and:
         - and:
-            - ${create_gateways}
+            - ${create_vcn}
             - true
         - not:
-            - ${create_vcn}
+            - ${create_gateways}
 
   create_internet_gateway:
     title: "Create_internet_gateway"
@@ -391,10 +391,10 @@ variables:
     visible:
       and:
         - and:
-            - ${create_gateways}
+            - ${create_vcn}
             - true
         - not:
-            - ${create_vcn}
+            - ${create_gateways}
 
 # BASTION SUBNET + BASTION MODULE
 
