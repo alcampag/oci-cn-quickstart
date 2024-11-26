@@ -2,7 +2,7 @@ variable "tenancy_ocid" {}
 variable "region" {}
 variable "compartment_ocid" {}
 variable "oke_image_name" {
-  default = "Oracle-Linux-8.10-2024.06.30-0-OKE-1.30.1-716"
+  default = "Oracle-Linux-8.10-2024.09.30-0-OKE-1.30.1-747"
 }
 variable "cni_type" {
   default = "npn"   # flannel if you need an OKE cluster with Flannel

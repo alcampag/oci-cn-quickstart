@@ -1,6 +1,6 @@
 module "oke" {
   source  = "oracle-terraform-modules/oke/oci"
-  version = "5.1.8"
+  version = "5.2.1"
   compartment_id = var.compartment_ocid
   # IAM - Policies
   create_iam_autoscaler_policy = "never"
