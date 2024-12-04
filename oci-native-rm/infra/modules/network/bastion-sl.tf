@@ -20,5 +20,3 @@ resource "oci_core_security_list" "bastion_security_list" {
   }
   count = var.create_bastion_subnet ? 1 : 0
 }
-
-#TODO: ADD 22 ingress to worker NSG!!!!!!
