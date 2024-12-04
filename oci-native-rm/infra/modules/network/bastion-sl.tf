@@ -8,10 +8,8 @@ resource "oci_core_security_list" "bastion_security_list" {
     source   = "0.0.0.0/0"
     description = "Allow SSH connections to the subnet. Can be deleted if only using OCI Bastion subnet"
     tcp_options {
-      destination_port_range {
-        max = 22
-        min = 22
-      }
+      max = 22
+      min = 22
     }
   }
   egress_security_rules {
