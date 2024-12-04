@@ -100,7 +100,7 @@ variable "service_subnet_name" {
 
 # BASTION SUBNET
 
-variable "create_bastion" {
+variable "create_bastion_subnet" {
   type = bool
 }
 

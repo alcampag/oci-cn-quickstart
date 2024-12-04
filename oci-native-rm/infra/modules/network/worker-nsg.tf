@@ -129,6 +129,23 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress
   }
 }
 
+resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress_10" {
+  direction                 = "INGRESS"
+  network_security_group_id = oci_core_network_security_group.worker_nsg.id
+  protocol                  = "6"
+  source_type = "CIDR_BLOCK"
+  source = var.bastion_subnet_cidr
+  stateless = false
+  description = "Allow SSH access from bastion subnet"
+  tcp_options {
+    source_port_range {
+      max = 22
+      min = 22
+    }
+  }
+  count = var.create_bastion_subnet ? 1 : 0
+}
+
 resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_1" {
   direction                 = "EGRESS"
   network_security_group_id = oci_core_network_security_group.worker_nsg.id

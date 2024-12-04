@@ -50,9 +50,9 @@ resource "oci_core_subnet" "bastion_subnet" {
   dns_label = var.bastion_subnet_dns_label
   display_name = var.bastion_subnet_name
   prohibit_public_ip_on_vnic = var.bastion_subnet_private
-  route_table_id = oci_core_route_table.service_route_table.id
+  route_table_id = var.bastion_subnet_private ? oci_core_route_table.service_route_table.id : oci_core_route_table.internet_route_table[0].id
   security_list_ids = [oci_core_security_list.bastion_security_list.0.id]
-  count = var.create_bastion ? 1 : 0
+  count = var.create_bastion_subnet ? 1 : 0
 }
 
 resource "oci_core_subnet" "fss_subnet" {

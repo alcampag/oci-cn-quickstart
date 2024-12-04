@@ -123,13 +123,18 @@ variable "service_subnet_name" {
 
 # BASTION SUBNET
 
+variable "create_bastion_subnet" {
+  type = bool
+  default = true
+}
+
 variable "bastion_subnet_cidr" {
   default = "10.1.0.8/29"
 }
 
 variable "bastion_subnet_private" {
   type = bool
-  default = true
+  default = false
 }
 
 variable "bastion_subnet_dns_label" {

@@ -21,7 +21,7 @@ output "service_subnet_id" {
 }
 
 output "bastion_subnet_id" {
-  value = var.create_bastion ? oci_core_subnet.bastion_subnet[0].id : null
+  value = var.create_bastion_subnet ? oci_core_subnet.bastion_subnet[0].id : null
 }
 
 # NSG

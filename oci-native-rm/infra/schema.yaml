@@ -47,17 +47,19 @@ variableGroups:
       - fss_subnet_name
       - fss_subnet_cidr
       - fss_subnet_dns_label
+      - create_bastion_subnet
+      - bastion_subnet_name
+      - bastion_subnet_cidr
+      - bastion_subnet_dns_label
       - create_gateways
       - nat_gateway_id
       - service_gateway_id
       - create_internet_gateway
 
   - title: "Bastion"
+    visible: ${create_bastion_subnet}
     variables:
       - create_bastion
-      - bastion_subnet_name
-      - bastion_subnet_cidr
-      - bastion_subnet_dns_label
       - bastion_compartment_id
       - bastion_cidr_block_allow_list
 
@@ -393,11 +395,11 @@ variables:
         - not:
             - ${create_gateways}
 
-# BASTION SUBNET + BASTION MODULE
+# BASTION SUBNET
 
-  create_bastion:
-    title: "Create Bastion"
-    description: "If flagged, the Stack creates the Bastion Subnet + an OCI Bastion instance"
+  create_bastion_subnet:
+    title: "Create Bastion Subnet"
+    description: "If flagged, the Stack creates the Bastion Subnet"
     type: boolean
 
   bastion_subnet_name:
@@ -405,21 +407,28 @@ variables:
     description: "Name of the subnet for Bastions"
     type: string
     required: true
-    visible: ${create_bastion}
+    visible: ${create_bastion_subnet}
 
   bastion_subnet_cidr:
     title: "Bastion subnet CIDR"
     description: "CIDR block to allocate for the Bastion subnet"
     type: string
     required: true
-    visible: ${create_bastion}
+    visible: ${create_bastion_subnet}
 
   bastion_subnet_dns_label:
     title: "Bastion subnet DNS label"
     description: "DNS label for the Bastion subnet"
     type: string
     required: true
-    visible: ${create_bastion}
+    visible: ${create_bastion_subnet}
+
+# BASTION MODULE
+
+  create_bastion:
+    title: "Create Bastion"
+    description: "If flagged, create an OCI Bastion instance"
+    type: boolean
 
   bastion_compartment_id:
     title: "Bastion Compartment"

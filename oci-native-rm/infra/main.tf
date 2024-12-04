@@ -34,7 +34,7 @@ module "network" {
   pod_subnet_dns_label = var.pod_subnet_dns_label
   pod_subnet_name = var.pod_subnet_name
   # BASTION SUBNET
-  create_bastion = var.create_bastion
+  create_bastion_subnet = var.create_bastion_subnet
   bastion_subnet_cidr = var.bastion_subnet_cidr
   bastion_subnet_dns_label = var.bastion_subnet_dns_label
   bastion_subnet_name = var.bastion_subnet_name
@@ -60,7 +60,7 @@ module "bastion" {
   vcn_name = var.vcn_name
   bastion_subnet_id = module.network.bastion_subnet_id
   bastion_cidr_block_allow_list = var.bastion_cidr_block_allow_list
-  count = var.create_bastion ? 1 : 0
+  count = local.create_bastion ? 1 : 0
 }
 
 module "lb" {

@@ -50,7 +50,7 @@ resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_ingress_3" 
       min = 6443
     }
   }
-  count = var.create_bastion ? 1 : 0
+  count = var.create_bastion_subnet ? 1 : 0
 }
 
 

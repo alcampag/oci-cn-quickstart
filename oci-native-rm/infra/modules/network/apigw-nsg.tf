@@ -35,5 +35,5 @@ resource "oci_core_network_security_group_security_rule" "apigw_nsg_rule_bastion
   source = var.bastion_subnet_cidr
   stateless = false
   description = "Rule to allow bastions to reach the API Gateway"
-  count = var.create_apigw && var.create_bastion ? 1 : 0
+  count = var.create_apigw && var.create_bastion_subnet ? 1 : 0
 }

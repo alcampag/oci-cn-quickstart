@@ -8,7 +8,7 @@ resource "oci_core_security_list" "bastion_security_list" {
     source   = "0.0.0.0/0"
     description = "Allow SSH connections to the subnet. Can be deleted if only using OCI Bastion subnet"
     tcp_options {
-      source_port_range {
+      destination_port_range {
         max = 22
         min = 22
       }
@@ -20,5 +20,7 @@ resource "oci_core_security_list" "bastion_security_list" {
     protocol    = "all"
     description = "Enable the bastion hosts to reach the entire VCN"
   }
-  count = var.create_bastion ? 1 : 0
+  count = var.create_bastion_subnet ? 1 : 0
 }
+
+#TODO: ADD 22 ingress to worker NSG!!!!!!
