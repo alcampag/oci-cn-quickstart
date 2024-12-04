@@ -13,7 +13,6 @@ variableGroups:
       - tenancy_ocid
       - compartment_ocid
       - region
-      - bastion_subnet_private
 
   - title: "Network"
     variables:
@@ -51,6 +50,7 @@ variableGroups:
       - bastion_subnet_name
       - bastion_subnet_cidr
       - bastion_subnet_dns_label
+      - bastion_subnet_private
       - create_gateways
       - nat_gateway_id
       - service_gateway_id
@@ -421,6 +421,12 @@ variables:
     description: "DNS label for the Bastion subnet"
     type: string
     required: true
+    visible: ${create_bastion_subnet}
+
+  bastion_subnet_private:
+    title: "Bastion subnet is private"
+    description: "Note that if you use the OCI Bastion, the bastion subnet can also be private"
+    type: boolean
     visible: ${create_bastion_subnet}
 
 # BASTION MODULE
