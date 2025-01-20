@@ -38,7 +38,7 @@ For a more restrictive set of policies, see the [documentation](https://docs.ora
 
 ## Step 3: Create the OKE data plane
 
-As the data plane vastly depends on the particular use case, there is no stack for it, and it depends mostly on your needs, as there are many options.
+As the data plane vastly depends on the particular use case, there is no stack for it, as there are many options.
 
 ### Option 3.1: Create the OKE data plane with Oracle Linux nodes
 
