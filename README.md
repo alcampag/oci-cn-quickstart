@@ -73,7 +73,24 @@ In some cases, some users prefer to create the nodes directly using the OCI web 
 
 #### Option 3.1.2: Create worker nodes by modifying the Terraform Resource Manager stack
 
-It is possible in OCI to easily modify the Terraform code of an OCI Resource Manager stack.
+It is possible to easily modify the Terraform code of an OCI Resource Manager stack.
 
-This way, we can modify the stack we deployed in Step 2 and add the data plane nodes:
+By using this feature, we can modify the stack we deployed in Step 2 and add the data plane nodes:
 
+![Edit Terraform configurations](images/edit_oci_stack.png)
+
+Instruction on how to modify the stack and add node pools can be found in the comments of the oke.tf file.
+
+### Option 3.2: Create the OKE data plane with Ubuntu nodes
+
+This option is most commonly used for AI workloads and GPU nodes, as Nvidia officially supports the Nvidia GPU plugin and DCGM exporter only on Ubuntu.
+
+#### Option 3.2.1: Create worker nodes by modifying the Terraform Resource Manager stack
+
+To use Ubuntu nodes on OKE, an Ubuntu custom image must be created beforehand. Documentation on how to do this is present in the oke.tf comments.
+
+Once we have an image, we can modify the Terraform configurations directly from the OCI web console, as with option 3.1.2
+
+### Option 3.3: Create an OKE RDMA cluster with Ubuntu nodes
+
+If you are looking to provision an OKE cluster for RDMA and GPUs using this stack and approach, feel free to contact one of the [EMEA AppDev team](https://github.com/oracle-devrel/technology-engineering/tree/main/app-dev) as this is a complex operation and requires more steps.
