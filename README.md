@@ -8,27 +8,6 @@ In this repository we are going to provision all the components one by one (netw
 
 NOTE: If you want to create an OKE cluster with GPU and RDMA, then the stack that creates everything is public and available [here](https://github.com/oracle-quickstart/oci-hpc-oke)
 
-Plan is to have a repo with a stack that creates a OKE cluster FOR the majority of the use cases
-Here we want to create all the components one by one (network, OKE control plane, OKE data plane).
-NOTE: if you want to create an OKE cluster with GPU and RDMA, then the stack that creates everything is public and is here[link]
-
-Step 1: Create the network infrastructure for OKE
-
-Step 2: Create the OKE control plane only
-
-Step 3: Create the OKE data plane
-
-	Option 3.1: Create the OKE data plane with OL nodes (CPU only, GPU restricted, no metrics with DCGM exporter)
-		Option 3.1.1: Manually (through the OCI web console)
-		Option 3.1.2: Edit the RM stack and modify the terraform code
-
-	Option 3.2: Create the OKE data plane with Ubuntu nodes (CPU, GPU only)
-		Option 3.2.1: Edit the RM stack and modify the terraform code
-	
-	Option 3.3 Create the OKE data plane with Ubuntu nodes (GPU and RDMA)
-		Option 3.3.1: Ask EMEA Specialists to get information to do that with a predefined solution
-
-
 ## Step 1: Create the network infrastructure for OKE
 
 This stack is used to create the initial network infrastructure for OKE. When configuring it, pay attention to some details:
