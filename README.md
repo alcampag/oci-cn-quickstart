@@ -1,41 +1,52 @@
-# Oracle Cloud Quickstart Cloud Native
+# OKE Quickstart
 
-This repository was created with the intent of facilitating users with their Cloud Native journey.
+This repository was created with the intent of facilitating users with the creation of an OKE cluster from scratch.
 
-OKE is the managed Kubernetes offering of Oracle Cloud, but getting started with it can be a challenging task from an
-infrastructure perspective.  
-By providing this repository and Terraform code, it could serve as an example for users to get started with.
+The plan is to have a documentation and some stacks for the majority of use cases.
 
-## OKE module example
+In this repository we are going to provision all the components one by one (network, OKE control plane, OKE data plane)
 
-This stack is ideal for all those users who want to provision an OKE cluster on the fly and try it.  
-Both the infrastructure and the cluster is created by the same OKE [module](https://github.com/oracle-terraform-modules/terraform-oci-oke).  
-To encourage users to explore the Terraform code, this solution can be deployed directly in the cloud shell, just click the link below and follow the instructions:
+NOTE: If you want to create an OKE cluster with GPU and RDMA, then the stack that creates everything is public and available [here](https://github.com/oracle-quickstart/oci-hpc-oke)
 
-[![Open in Code Editor](https://raw.githubusercontent.com/oracle-devrel/oci-code-editor-samples/main/images/open-in-code-editor.png)](https://cloud.oracle.com/?region=home&cs_repo_url=https://github.com/alcampag/oci-cn-quickstart.git&cs_branch=main&cs_readme_path=INIT.md&cs_open_ce=false)
+Plan is to have a repo with a stack that creates a OKE cluster FOR the majority of the use cases
+Here we want to create all the components one by one (network, OKE control plane, OKE data plane).
+NOTE: if you want to create an OKE cluster with GPU and RDMA, then the stack that creates everything is public and is here[link]
+
+Step 1: Create the network infrastructure for OKE
+
+Step 2: Create the OKE control plane only
+
+Step 3: Create the OKE data plane
+
+	Option 3.1: Create the OKE data plane with OL nodes (CPU only, GPU restricted, no metrics with DCGM exporter)
+		Option 3.1.1: Manually (through the OCI web console)
+		Option 3.1.2: Edit the RM stack and modify the terraform code
+
+	Option 3.2: Create the OKE data plane with Ubuntu nodes (CPU, GPU only)
+		Option 3.2.1: Edit the RM stack and modify the terraform code
+	
+	Option 3.3 Create the OKE data plane with Ubuntu nodes (GPU and RDMA)
+		Option 3.3.1: Ask EMEA Specialists to get information to do that with a predefined solution
 
 
-## OCI Resource Manager: Infrastructure + OKE Cluster creation
+## Step 1: Create the network infrastructure for OKE
 
-The stack here is more advances and it involves 2 phases: infrastructure creation and OKE cluster creation.
-Compared to the module example, network configurations and OKE cluster provisioning have been separated in 2 different stacks.
-Note that the input of these stacks are not validated, it is the user's responsibility to provide the correct input and eventually implement validation.
-
-### Stack 1: Provision the network infrastructure for OKE
-
-The first phase involves provisioning the network infrastructure for OKE. All the Terraform code here can be used as a reference:
+This stack is used to create the initial network infrastructure for OKE. When configuring it, pay attention to some details:
+* Select Flannel as CNI if you are planning to use Bare Metal shapes for the OKE data plane, or if you do not have many IPs available in the VCN
+* You can apply this stack even on an existing VCN, so that only the NSGs for OKE will be created
+* By default, everything is private, but there is the possibility to create public subnets
+* Be careful when modifying the default values, as inputs are not validated
 
 [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/releases/latest/download/infra_v1.0.3.zip)
 
-### Stack 2: OKE Cluster provisioning
+## Step 2: Create the OKE control plane
 
-This additional stack will create a OKE cluster by using the infrastructure created on phase 1.
+This stack is used to create the OKE control plane ONLY.
+
+NOTE: if you are planning to use Ubuntu nodes for the data plane, be sure to select v1.29.1 as OKE version, as currently it's the only version that is supporting Ubuntu nodes.
 
 [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/releases/latest/download/oke_v1.0.3.zip)
 
-NOTE: In this stack the node pools are not created, and it is left to the user to modify this stack to include the node pools needed.
-To do this, an example of node pool creation is present in the OKE Module example.
-  
 Also note that if the network infrastructure is located in a different compartment than the OKE cluster AND you are planning to use the OCI_VCN_NATIVE CNI,
 you must add these policies:
 
@@ -45,3 +56,24 @@ Allow any-user to use private-ips in tenancy where all { request.principal.type 
 Allow any-user to use network-security-groups in tenancy where all { request.principal.type = 'cluster' }
 ```
 For a more restrictive set of policies, see the [documentation](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengpodnetworking_topic-OCI_CNI_plugin.htm).
+
+## Step 3: Create the OKE data plane
+
+As the data plane vastly depends on the particular use case, there is no stack for it, and it depends mostly on your needs, as there are many options.
+
+### Option 3.1: Create the OKE data plane with Oracle Linux nodes
+
+This option is most commonly used for general purpose CPU workloads.
+
+Although GPU workloads are supported too, the DCGM exporter to collect GPU metrics is still not available, so take this into account if you are planning to use Oracle Linux nodes and GPUs.
+
+#### Option 3.1.1: Create worker nodes manually through the OCI web console
+
+In some cases, some users prefer to create the nodes directly using the OCI web console. In this case there is nothing else to do, you are free to login and create the node pools.
+
+#### Option 3.1.2: Create worker nodes by modifying the Terraform Resource Manager stack
+
+It is possible in OCI to easily modify the Terraform code of an OCI Resource Manager stack.
+
+This way, we can modify the stack we deployed in Step 2 and add the data plane nodes:
+

@@ -2,11 +2,22 @@ locals {
   is_cp_subnet_private = data.oci_core_subnet.cp_subnet_data.prohibit_public_ip_on_vnic
   is_lb_subnet_private = data.oci_core_subnet.lb_subnet_data.prohibit_public_ip_on_vnic
   is_flannel = var.cni_type == "flannel"
+
+  ssh_public_key = ""     # Insert the ssh public key to access worker nodes
+
+  runcmd_bootstrap_ubuntu = "oke bootstrap"
+  runcmd_bootstrap_oracle_linux = "sudo /usr/libexec/oci-growfs -y"
+
+  cloud_init = {
+    runcmd = compact([
+      local.runcmd_bootstrap_ubuntu,        # Modify here depending on the OS selected for the worker nodes
+    ])
+  }
 }
 
 module "oke" {
   source  = "oracle-terraform-modules/oke/oci"
-  version = "5.1.8"
+  version = "5.2.3"
   compartment_id = var.oke_compartment_id
   # IAM - Policies
   create_iam_autoscaler_policy = "never"
@@ -41,7 +52,6 @@ module "oke" {
   control_plane_is_public = ! local.is_cp_subnet_private
   load_balancers = local.is_lb_subnet_private ? "internal" : "public"
   preferred_load_balancer = local.is_lb_subnet_private ? "internal" : "public"
-  worker_is_public = false
   # Cluster module
   create_cluster = true
   cluster_kms_key_id = null
@@ -59,6 +69,29 @@ module "oke" {
 
   # Operator
   create_operator = false
+
+  # OKE data plane, node workers
+  worker_pool_mode = "node-pool"
+  worker_is_public = false
+  worker_disable_default_cloud_init = true                                                                    # Set it to true if you are planning to use Ubuntu nodes
+  #ssh_public_key = local.ssh_public_key                                                                      # De-comment if you want a ssh key to access the worker nodes, be sure to set the local variable
+  worker_image_type = "custom"                                                                                # Better to use custom shapes for both Ubuntu and Oracle Linux nodes
+  worker_image_id = ""                                                                                        # The image id to use for the worker nodes. For Oracle Linux images, check this link: https://docs.oracle.com/en-us/iaas/images/oke-worker-node-oracle-linux-8x/index.htm
+                                                                                                              # For Ubuntu images, you need to import it in your tenancy, see: https://canonical-oracle.readthedocs-hosted.com/en/latest/oracle-how-to/deploy-oke-nodes-using-ubuntu-images/
+  worker_cloud_init = [{ content_type = "text/cloud-config", content = yamlencode(local.cloud_init)}]         # Cloud init is different, depending if you are using Ubuntu or Oracle Linux nodes, see local.cloud_init variable
+
+
+  worker_pools = {
+    np1 = {
+      shape = "VM.Standard.E4.Flex",
+      ocpus = 2,
+      #image_id = "",                        # You can override global worker node parameters individually in the node pool
+      memory = 16,
+      boot_volume_size = 150,
+      ignore_initial_pool_size = true,       # If set to true, node pool size drift won't be accounted in Terraform, useful also if this pool is autoscaled by an external component or user
+      create = false                         # Set it to true so that the node pool is created
+    }
+  }
 
   providers = {
     oci.home = oci.home
