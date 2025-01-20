@@ -72,4 +72,4 @@ Once we have an image, we can modify the Terraform configurations directly from 
 
 ### Option 3.3: Create an OKE RDMA cluster with Ubuntu nodes
 
-If you are looking to provision an OKE cluster for RDMA and GPUs using this stack and approach, feel free to contact one of the [EMEA AppDev team](https://github.com/oracle-devrel/technology-engineering/tree/main/app-dev) as this is a complex operation and requires more steps.
+If you are looking to provision an OKE cluster for RDMA and GPUs using this stack and approach, feel free to contact one of the [EMEA AppDev team](https://github.com/oracle-devrel/technology-engineering/tree/main/app-dev) as we prefer to help you, and to give you some tips to go faster.
