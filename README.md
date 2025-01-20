@@ -58,7 +58,7 @@ By using this feature, we can modify the stack we deployed in Step 2 and add the
 
 ![Edit Terraform configurations](images/edit_oci_stack.png)
 
-Instruction on how to modify the stack and add node pools can be found in the comments of the oke.tf file.
+Instructions on how to modify the stack and add node pools can be found in the comments of the oke.tf file.
 
 ### Option 3.2: Create the OKE data plane with Ubuntu nodes
 
