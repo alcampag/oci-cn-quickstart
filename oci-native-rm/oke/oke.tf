@@ -40,7 +40,7 @@ module "oke" {
     pub_lb = {create = "never" }
     int_lb = { create = "never"}
     cp = { id = var.cp_nsg_id }
-    workers = { create = "never" } # provide NSG ID if you want to manage node pools using this module
+    workers = { create = "never", id = "ocid1.networksecuritygroup.oc1.uk-london-1.aaaaaaaaxicqglwxiczejiqfuu7jddueevanauomk33p3r76s3tbzhqt7cnq" } # provide NSG ID if you want to manage node pools using this module
     pods = { create = "never" }  # provide NSG ID if you want to manage node pools using this module and you are using OCI_VCN_NATIVE CNI
   }
   network_compartment_id = var.network_compartment_id
@@ -76,7 +76,7 @@ module "oke" {
   worker_disable_default_cloud_init = true                                                                    # Set it to true if you are planning to use Ubuntu nodes
   #ssh_public_key = local.ssh_public_key                                                                      # De-comment if you want a ssh key to access the worker nodes, be sure to set the local variable
   worker_image_type = "custom"                                                                                # Better to use custom shapes for both Ubuntu and Oracle Linux nodes
-  worker_image_id = ""                                                                                        # The image id to use for the worker nodes. For Oracle Linux images, check this link: https://docs.oracle.com/en-us/iaas/images/oke-worker-node-oracle-linux-8x/index.htm
+  worker_image_id = "ocid1.image.oc1.uk-london-1.aaaaaaaaacgazvlgknfdsetivxw3fwqkjjlmnco4l2fljlftrm5hzdm4tk3q"                                                                                        # The image id to use for the worker nodes. For Oracle Linux images, check this link: https://docs.oracle.com/en-us/iaas/images/oke-worker-node-oracle-linux-8x/index.htm
                                                                                                               # For Ubuntu images, you need to import it in your tenancy, see: https://canonical-oracle.readthedocs-hosted.com/en/latest/oracle-how-to/deploy-oke-nodes-using-ubuntu-images/
   worker_cloud_init = [{ content_type = "text/cloud-config", content = yamlencode(local.cloud_init)}]         # Cloud init is different, depending if you are using Ubuntu or Oracle Linux nodes, see local.cloud_init variable
 
@@ -84,12 +84,13 @@ module "oke" {
   worker_pools = {
     np1 = {
       shape = "VM.Standard.E4.Flex",
+      size = 1,
       ocpus = 2,
       #image_id = "",                        # You can override global worker node parameters individually in the node pool
       memory = 16,
       boot_volume_size = 150,
       ignore_initial_pool_size = true,       # If set to true, node pool size drift won't be accounted in Terraform, useful also if this pool is autoscaled by an external component or user
-      create = false                         # Set it to true so that the node pool is created
+      create = true                          # Set it to true so that the node pool is created, REMEMBER to set also the worker NSG id!!!
     }
   }
 
