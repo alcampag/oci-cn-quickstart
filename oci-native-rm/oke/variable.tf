@@ -14,7 +14,9 @@ variable "cp_subnet_id" {}
 variable "cp_nsg_id" {}
 variable "worker_subnet_id" {}
 variable "worker_nsg_id" {}
-variable "pod_nsg_id" {}
+variable "pod_nsg_id" {
+  default = null
+}
 variable "pod_subnet_id" {
   default = null
 }
