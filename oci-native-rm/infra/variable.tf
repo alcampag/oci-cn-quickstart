@@ -54,9 +54,8 @@ variable "cp_subnet_private" {
   default = true
 }
 
-variable "create_cp_public_allow_rule" {
-  type = bool
-  default = true
+variable "cp_allowed_source_cidr" {
+  default = "0.0.0.0/0"
 }
 
 # WORKER SUBNET
@@ -186,7 +185,7 @@ variable "create_internet_gateway" {
 
 variable "create_bastion" {
   type = bool
-  default = true
+  default = false
 }
 
 variable "bastion_compartment_id" {
@@ -197,115 +196,4 @@ variable "bastion_cidr_block_allow_list" {
   type = list(string)
   default = ["0.0.0.0/0"]
 }
-
-# LB + WAA
-
-variable "create_lb" {
-  type = bool
-  default = false
-}
-
-variable "lb_name" {
-  default = "oke-lb"
-}
-
-variable "lb_min_bandwidth" {
-  type = number
-  default = 10
-}
-
-variable "lb_max_bandwidth" {
-  type = number
-  default = 10
-}
-
-variable "create_lb_http_redirect_rule" {
-  type = bool
-  default = true
-}
-
-variable "create_waa" {
-  type = bool
-  default = true
-}
-
-# DNS PRIVATE VIEW
-
-variable "create_private_dns_view" {
-  type = bool
-  default = false
-}
-
-variable "custom_private_view_name" {
-  default = "np-oci-acme-tst"
-}
-
-variable "vcn_custom_private_zone_domain_names" {
-  type = list(string)
-  default = ["np.oci.acme.tst"]
-}
-
-# VAULT
-
-variable "create_vault" {
-  type = bool
-  default = false
-}
-
-variable "vault_compartment_id" {
-  default = null
-}
-
-variable "vault_name" {
-  default = "oci-vault-quickstart"
-}
-
-# CERTIFICATE
-
-variable "create_certificates" {
-  type = bool
-  default = false
-}
-
-variable "certificate_compartment_id" {
-  default = null
-}
-
-variable "cluster_ca_subject_common_name" {
-  default = "oke-quickstart.np.oci.acme.tst"
-}
-variable "lb_certificate_subject_common_name" {
-  default = "oke-lb.lb.oke-quickstart.np.oci.acme.tst"
-}
-variable "apigw_certificate_subject_common_name" {
-  default = "api.oke-quickstart.np.oci.acme.tst"
-}
-variable "np_ca_subject_common_name" {
-  default = "np.oci.acme.tst"
-}
-variable "root_ca_subject_common_name" {
-  default = "oci.acme.tst"
-}
-
-variable "oke_lb_certificate_name" {
-  default = "oke-lb-certificate"
-}
-
-variable "apigw_certificate_name" {
-  default = "api-gw-certificate"
-}
-
-# APIGW
-
-variable "create_apigw" {
-  type = bool
-  default = false
-}
-
-variable "apigw_name" {
-  default = "oci-apigw-quickstart"
-}
-
-
-
 

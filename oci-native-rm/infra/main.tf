@@ -16,7 +16,7 @@ module "network" {
   cp_subnet_dns_label = var.cp_subnet_dns_label
   cp_subnet_name = var.cp_subnet_name
   cp_subnet_private = var.cp_subnet_private
-  create_cp_public_allow_rule = var.create_cp_public_allow_rule
+  cp_allowed_source_cidr = var.cp_allowed_source_cidr
   # SERVICE SUBNET
   create_service_subnet = var.create_service_subnet
   service_subnet_cidr = var.service_subnet_cidr
@@ -49,8 +49,6 @@ module "network" {
   nat_gateway_id = var.nat_gateway_id
   service_gateway_id = var.service_gateway_id
   create_internet_gateway = var.create_internet_gateway
-  # APIGW
-  create_apigw = var.create_apigw
 }
 
 module "bastion" {
@@ -61,71 +59,4 @@ module "bastion" {
   bastion_subnet_id = module.network.bastion_subnet_id
   bastion_cidr_block_allow_list = var.bastion_cidr_block_allow_list
   count = local.create_bastion ? 1 : 0
-}
-
-module "lb" {
-  source = "./modules/lb"
-  network_compartment_id = var.network_compartment_id
-  region = var.region
-  subnet_id = module.network.service_subnet_id
-  lb_nsg_id = module.network.lb_nsg_id
-  lb_name = var.lb_name
-  lb_max_bandwidth = var.lb_max_bandwidth
-  lb_min_bandwidth = var.lb_min_bandwidth
-  is_private = var.service_subnet_private
-  create_lb_http_redirect_rule = var.create_lb_http_redirect_rule
-  create_waa = var.create_waa
-  count = local.create_lb ? 1 : 0
-}
-
-module "dns" {
-  source = "./modules/dns"
-  region = var.region
-  compartment_id = var.network_compartment_id
-  vcn_id = module.network.vcn_id
-  custom_private_view_name = var.custom_private_view_name
-  vcn_custom_private_zone_domain_names = var.vcn_custom_private_zone_domain_names
-  count = var.create_private_dns_view ? 1 : 0
-}
-
-module "vault" {
-  source = "./modules/vault"
-  region = var.region
-  compartment_id = var.vault_compartment_id
-  vault_name = var.vault_name
-  count = var.create_vault ? 1 : 0
-}
-
-
-# As a Certificate can't be deleted immediately, so the CAs can't be deleted until the certificate has been fully deleted...
-module "certificate" {
-  source = "./modules/certificate"
-  region = var.region
-  compartment_id = var.certificate_compartment_id
-  cluster_ca_key_id = module.vault.0.cluster_ca_key_id
-  np_ca_key_id = module.vault.0.np_ca_key_id
-  root_ca_key_id = module.vault.0.root_ca_key_id
-  cluster_ca_subject_common_name = var.cluster_ca_subject_common_name
-  lb_certificate_subject_common_name = var.lb_certificate_subject_common_name
-  apigw_certificate_subject_common_name = var.apigw_certificate_subject_common_name
-  np_ca_subject_common_name = var.np_ca_subject_common_name
-  root_ca_subject_common_name = var.root_ca_subject_common_name
-  oke_lb_certificate_name = var.oke_lb_certificate_name
-  apigw_certificate_name = var.apigw_certificate_name
-  count = local.create_certificates ? 1 : 0
-}
-
-module "apigw" {
-  source = "./modules/apigw"
-  region = var.region
-  network_compartment_id = var.network_compartment_id
-  apigw_nsg_id = module.network.apigw_nsg_id
-  subnet_id = module.network.service_subnet_id
-  apigw_private = var.service_subnet_private
-  create_example_deployment = false
-  apigw_name = var.apigw_name
-  example_deployment_hostname = "oke.example.com"
-  apigw_certificate_id = var.create_certificates ? module.certificate.0.apigw_certificate_id : null
-  apigw_certificate_authority_id = var.create_certificates ? module.certificate.0.np_ca_id : null
-  count = local.create_apigw ? 1 : 0
 }

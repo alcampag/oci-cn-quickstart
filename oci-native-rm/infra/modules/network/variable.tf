@@ -44,8 +44,7 @@ variable "cp_subnet_private" {
   type = bool
 }
 
-variable "create_cp_public_allow_rule" {
-  type = bool
+variable "cp_allowed_source_cidr" {
 }
 
 # WORKER SUBNET
@@ -140,14 +139,5 @@ variable "service_gateway_id" {}
 variable "nat_gateway_id" {}
 
 variable "create_internet_gateway" {
-  type = bool
-}
-
-
-
-
-# APIGW
-
-variable "create_apigw" {
   type = bool
 }

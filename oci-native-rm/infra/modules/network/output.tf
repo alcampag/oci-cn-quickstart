@@ -41,7 +41,3 @@ output "worker_nsg_id" {
 output "lb_nsg_id" {
   value = oci_core_network_security_group.oke_lb_nsg.id
 }
-
-output "apigw_nsg_id" {
-  value = var.create_apigw ? oci_core_network_security_group.apigw_nsg.0.id : null
-}

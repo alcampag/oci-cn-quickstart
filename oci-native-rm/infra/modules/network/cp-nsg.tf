@@ -123,10 +123,15 @@ resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_ingress_8" 
   network_security_group_id = oci_core_network_security_group.cp_nsg.id
   protocol                  = "6"
   source_type = "CIDR_BLOCK"
-  source = "0.0.0.0/0"
+  source = var.cp_allowed_source_cidr
   stateless = false
-  description = "Allow ingress traffic from anywhere - public rule"
-  count = var.create_cp_public_allow_rule ? 1 : 0
+  description = "Allow ingress traffic from specified sources"
+  tcp_options {
+    destination_port_range {
+      max = 6443
+      min = 6443
+    }
+  }
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_egress_1" {

@@ -106,28 +106,6 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_i
   count = local.is_npn ? 1 : 0
 }
 
-resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_apigw_egress" {
-  direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
-  protocol                  = "6"
-  destination_type = "NETWORK_SECURITY_GROUP"
-  destination = oci_core_network_security_group.apigw_nsg.0.id
-  stateless = true
-  description = "Allow egress traffic to the APIGW for responses"
-  count = var.create_apigw ? 1 : 0
-}
-
-resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_apigw_ingress" {
-  direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
-  protocol                  = "6"
-  source_type = "NETWORK_SECURITY_GROUP"
-  source = oci_core_network_security_group.apigw_nsg.0.id
-  stateless = true
-  description = "Allow ingress traffic for the APIGW requests"
-  count = var.create_apigw ? 1 : 0
-}
-
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_http_ingress" {
   direction                 = "INGRESS"
   network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
