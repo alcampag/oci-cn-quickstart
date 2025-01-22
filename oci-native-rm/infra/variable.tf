@@ -4,7 +4,7 @@ variable "compartment_ocid" {}
 variable "network_compartment_id" {}
 
 variable "cni_type" {
-  default = "npn"
+  default = "flannel"
 }
 
 # VCN

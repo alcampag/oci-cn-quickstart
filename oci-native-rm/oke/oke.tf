@@ -40,8 +40,8 @@ module "oke" {
     pub_lb = {create = "never" }
     int_lb = { create = "never"}
     cp = { id = var.cp_nsg_id }
-    workers = { create = "never"} # provide NSG ID if you want to manage node pools using this module  ---> workers = { create = "never", id = "" }
-    pods = { create = "never" }  # provide NSG ID if you want to manage node pools using this module and you are using OCI_VCN_NATIVE CNI
+    workers = { id = var.worker_nsg_id }
+    pods = { create = "never", id = var.cni_type == "flannel" ? null : var.pod_nsg_id }
   }
   network_compartment_id = var.network_compartment_id
   assign_public_ip_to_control_plane = ! local.is_cp_subnet_private
@@ -83,8 +83,9 @@ module "oke" {
 
   worker_pools = {
     np1 = {
-      shape = "VM.Standard.E4.Flex",
+      shape = "VM.Standard.E4.Flex",        # No need to specify ocpus and memory if you are not using a Flex shape
       size = 1,
+      placement_ads = ["1"],                # As best practice, one node pool should be associated only to one specific AD
       ocpus = 2,
       #image_id = "",                        # You can override global worker node parameters individually in the node pool
       memory = 16,
@@ -98,3 +99,20 @@ module "oke" {
     oci.home = oci.home
   }
 }
+
+
+# Add on section, you can also manage addons through Terraform
+
+/*resource "oci_containerengine_addon" "oke_cert_manager" {
+  addon_name                       = "CertManager"
+  cluster_id                       = module.oke.cluster_id
+  remove_addon_resources_on_delete = false
+  depends_on = [module.oke]
+}
+
+resource "oci_containerengine_addon" "oke_metrics_server" {
+  addon_name                       = "KubernetesMetricsServer"
+  cluster_id                       = module.oke.cluster_id
+  remove_addon_resources_on_delete = false
+  depends_on = [module.oke, oci_containerengine_addon.oke_cert_manager]
+}*/

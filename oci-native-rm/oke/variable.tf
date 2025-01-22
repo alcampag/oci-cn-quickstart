@@ -6,16 +6,18 @@ variable "home_region" {}
 
 variable "network_compartment_id" {}
 variable "cni_type" {
-  default = "npn"
+  default = "flannel"
 }
 variable "vcn_id" {}
 variable "lb_subnet_id" {}
 variable "cp_subnet_id" {}
+variable "cp_nsg_id" {}
 variable "worker_subnet_id" {}
+variable "worker_nsg_id" {}
+variable "pod_nsg_id" {}
 variable "pod_subnet_id" {
   default = null
 }
-variable "cp_nsg_id" {}
 variable "cp_allowed_cidr_list" {
   type = list(string)
   default = ["0.0.0.0/0"]

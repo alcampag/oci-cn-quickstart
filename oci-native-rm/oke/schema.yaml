@@ -24,6 +24,8 @@ variableGroups:
       - worker_subnet_id
       - pod_subnet_id
       - cp_nsg_id
+      - worker_nsg_id
+      - pod_nsg_id
       - cp_allowed_cidr_list
 
   - title: "Cluster"
@@ -123,6 +125,28 @@ variables:
       compartmentId: ${network_compartment_id}
       vcnId: ${vcn_id}
     required: true
+
+  worker_nsg_id:
+    title: "Worker NSG"
+    description: "Existing NSG to attach to the OKE worker nodes"
+    type: oci:core:nsg:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${vcn_id}
+    required: true
+
+  pod_nsg_id:
+    title: "Pod NSG"
+    description: "Existing NSG to attach to pods"
+    type: oci:core:nsg:id
+    dependsOn:
+      compartmentId: ${network_compartment_id}
+      vcnId: ${vcn_id}
+    required: true
+    visible:
+      eq:
+        - ${cni_type}
+        - npn
 
   cp_allowed_cidr_list:
     title: "Control Plane allowed CIDR blocks"
