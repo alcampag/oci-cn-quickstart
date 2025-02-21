@@ -17,7 +17,7 @@ resource "oci_core_subnet" "oke_cp_subnet" {
   dns_label = var.cp_subnet_dns_label
   display_name = var.cp_subnet_name
   prohibit_public_ip_on_vnic = var.cp_subnet_private
-  route_table_id = var.cp_subnet_private ? oci_core_route_table.service_route_table.id : oci_core_route_table.internet_route_table[0].id
+  route_table_id = var.cp_subnet_private ? local.cp_nat_mode ? oci_core_route_table.nat_route_table.id : oci_core_route_table.service_route_table.id : oci_core_route_table.internet_route_table[0].id
   count = local.create_cp_subnet ? 1 : 0
 }
 

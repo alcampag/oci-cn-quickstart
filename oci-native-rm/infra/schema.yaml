@@ -56,6 +56,12 @@ variableGroups:
       - service_gateway_id
       - create_internet_gateway
 
+  - title: "Control Plane External Connection"
+    variables:
+      - cp_connection_notice
+      - cp_external_nat
+      - cp_egress_cidr
+
   - title: "Bastion"
     visible: ${create_bastion_subnet}
     variables:
@@ -350,7 +356,46 @@ variables:
         - not:
             - ${create_gateways}
 
-# BASTION SUBNET
+
+# CONTROL PLANE EXTERNAL CONNECTION
+  cp_connection_notice:
+    title: "NOTICE"
+    type: text
+    multiline: true
+    default: "The OKE Control Plane sometimes requires connection to Internet, and so it requires a NAT for some use cases.\nOne of this use case is to integrate OKE with an external OIDC Identity Provider.\nYou have here the option to choose between having a NAT or only enable routing for the required Service Gateway"
+    required: false
+
+  cp_external_nat:
+    title: "I want the Control Plane to be able to reach external Internet services"
+    description: "A routing rule to the NAT gateway will be created for the control plane"
+    type: boolean
+    visible:
+      and:
+        - ${cp_subnet_private}
+        - ${create_cp_subnet}
+
+  allow_external_cp_traffic:
+    title: "Allow external Control Plane traffic"
+    description: "Allow external traffic to Internet from the Control Plane"
+    type: boolean
+    visible:
+      or:
+        - not:
+            - ${create_cp_subnet}
+        - or:
+          - not:
+              - ${cp_subnet_private}
+          - ${cp_external_nat}
+
+  cp_egress_cidr:
+    title: "Egress CIDR block"
+    description: "Allowed egress IP range that the Control Plane is allowed to call"
+    type: string
+    required: true
+    visible: ${allow_external_cp_traffic}
+
+
+  # BASTION SUBNET
 
   create_bastion_subnet:
     title: "Create Bastion Subnet"

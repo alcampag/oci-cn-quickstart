@@ -220,4 +220,14 @@ resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_egress_6" {
   }
 }
 
+resource "oci_core_network_security_group_security_rule" "oke_cp_nsg_egress_7" {
+  direction                 = "EGRESS"
+  network_security_group_id = oci_core_network_security_group.cp_nsg.id
+  protocol                  = "6"
+  destination_type = "CIDR_BLOCK"
+  destination = var.cp_egress_cidr
+  stateless = false
+  description = "Allow external traffic communication"
+  count = local.create_cp_external_traffic_rule ? 1 : 0
+}
 

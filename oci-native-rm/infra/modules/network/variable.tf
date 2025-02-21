@@ -47,6 +47,14 @@ variable "cp_subnet_private" {
 variable "cp_allowed_source_cidr" {
 }
 
+variable "cp_external_nat" {}
+
+variable "allow_external_cp_traffic" {
+  type = bool
+}
+
+variable "cp_egress_cidr" {}
+
 # WORKER SUBNET
 
 variable "create_worker_subnet" {

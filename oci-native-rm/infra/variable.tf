@@ -181,6 +181,22 @@ variable "create_internet_gateway" {
   default = true
 }
 
+#CONTROL PLANE EXTERNAL CONNECTION
+
+variable "cp_external_nat" {
+  type = bool
+  default = true
+}
+
+variable "allow_external_cp_traffic" {
+  type = bool
+  default = true
+}
+
+variable "cp_egress_cidr" {
+  default = "0.0.0.0/0"
+}
+
 # BASTION MODULE
 
 variable "create_bastion" {
