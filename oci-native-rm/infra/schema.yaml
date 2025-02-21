@@ -393,8 +393,13 @@ variables:
     description: "Allowed egress IP range that the Control Plane is allowed to call"
     type: string
     required: true
-    visible: ${allow_external_cp_traffic}
-
+    visible:
+      and:
+        - ${allow_external_cp_traffic}
+        - or:
+            - not:
+                - ${cp_subnet_private}
+            - ${cp_external_nat}
 
   # BASTION SUBNET
 
