@@ -60,6 +60,7 @@ variableGroups:
     variables:
       - cp_connection_notice
       - cp_external_nat
+      - allow_external_cp_traffic
       - cp_egress_cidr
 
   - title: "Bastion"
