@@ -16,7 +16,7 @@ This stack is used to create the initial network infrastructure for OKE. When co
 * By default, everything is private, but there is the possibility to create public subnets
 * Be careful when modifying the default values, as inputs are not validated
 
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/releases/download/v1.0.5/infra.zip)
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/releases/download/v1.0.6/infra.zip)
 
 ## Step 2: Create the OKE control plane
 
@@ -24,7 +24,7 @@ This stack is used to create the OKE control plane ONLY.
 
 NOTE: if you are planning to use Ubuntu nodes for the data plane, be sure to select v1.29.1 as OKE version, as currently it's the only version that is supporting Ubuntu nodes.
 
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/releases/download/v1.0.5/oke.zip)
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/releases/download/v1.0.6/oke.zip)
 
 Also note that if the network infrastructure is located in a different compartment than the OKE cluster AND you are planning to use the OCI_VCN_NATIVE CNI,
 you must add these policies:
