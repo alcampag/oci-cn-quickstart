@@ -105,7 +105,7 @@ module "oke" {
       memory = 16,
       boot_volume_size = 150,
       ignore_initial_pool_size = true,       # If set to true, node pool size drift won't be accounted in Terraform, useful also if this pool is autoscaled by an external component or user
-      create = true                          # Set it to true so that the node pool is created, REMEMBER to set also the relative NSG id!!!
+      create = false                          # Set it to true so that the node pool is created, REMEMBER to set also the relative NSG id!!!
     }
   }
 
