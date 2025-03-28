@@ -3,21 +3,23 @@ locals {
   is_lb_subnet_private = data.oci_core_subnet.lb_subnet_data.prohibit_public_ip_on_vnic
   is_flannel = var.cni_type == "flannel"
 
+  volume_kms_key_id = ""  # kms OCID of the key used for in-transit and at-rest encryption of block volumes
   ssh_public_key = ""     # Insert the ssh public key to access worker nodes
 
   runcmd_bootstrap_ubuntu = "oke bootstrap"
   runcmd_bootstrap_oracle_linux = "sudo /usr/libexec/oci-growfs -y"
 
+  # UBUNTU NODES: modify this cloud init script
   cloud_init = {
     runcmd = compact([
-      local.runcmd_bootstrap_ubuntu,        # Modify here depending on the OS selected for the worker nodes
+      local.runcmd_bootstrap_oracle_linux,        # Modify here depending on the OS selected for the worker nodes
     ])
   }
 }
 
 module "oke" {
   source  = "oracle-terraform-modules/oke/oci"
-  version = "5.2.3"
+  version = "5.2.4"
   compartment_id = var.oke_compartment_id
   # IAM - Policies
   create_iam_autoscaler_policy = "never"
@@ -54,7 +56,7 @@ module "oke" {
   preferred_load_balancer = local.is_lb_subnet_private ? "internal" : "public"
   # Cluster module
   create_cluster = true
-  cluster_kms_key_id = null
+  cluster_kms_key_id = var.cluster_kms_key_id
   cluster_name = var.cluster_name
   cluster_type = var.cluster_type
   cni_type = var.cni_type
@@ -73,11 +75,20 @@ module "oke" {
   # OKE data plane, node workers
   worker_pool_mode = "node-pool"
   worker_is_public = false
-  worker_disable_default_cloud_init = true                                                                    # Set it to true if you are planning to use Ubuntu nodes
-  #ssh_public_key = local.ssh_public_key                                                                      # De-comment if you want a ssh key to access the worker nodes, be sure to set the local variable
-  worker_image_type = "custom"                                                                                # Better to use custom shapes for both Ubuntu and Oracle Linux nodes
-  worker_image_id = ""                                                                                        # The image id to use for the worker nodes. For Oracle Linux images, check this link: https://docs.oracle.com/en-us/iaas/images/oke-worker-node-oracle-linux-8x/index.htm
-                                                                                                              # For Ubuntu images, you need to import it in your tenancy, see: https://canonical-oracle.readthedocs-hosted.com/en/latest/oracle-how-to/deploy-oke-nodes-using-ubuntu-images/
+  worker_disable_default_cloud_init = false # UBUNTU NODES Set it to true if you are planning to use Ubuntu nodes
+  #ssh_public_key = local.ssh_public_key    # De-comment if you want a ssh key to access the worker nodes, be sure to set the local variable
+  worker_image_type = "oke"                 # NOTE: Better to use "custom" and specify the image id in a production environment
+  #worker_image_id = ""                     # The image id to use for the worker nodes. For Oracle Linux images, check this link: https://docs.oracle.com/en-us/iaas/images/oke-worker-node-oracle-linux-8x/index.htm
+                                            # For Ubuntu images, you need to import it in your tenancy, see: https://canonical-oracle.readthedocs-hosted.com/en/latest/oracle-how-to/deploy-oke-nodes-using-ubuntu-images/
+
+
+  # Set this to true to enable in-transit encryption on all node pools by default
+  # NOTE: in-transit encryption is supported only for paravirtualized attached volumes, hence you will need to create another StorageClass in the cluster as the default oci-bv StorageClass uses iSCSI
+  # Also note that Bare Metal instances do not support paravirtualized volumes, so do not enable this for node pools that require BM instances
+  worker_pv_transit_encryption = false
+  # Enable this to enable encryption of volumes with a key managed by you, in your OCI Vault
+  #worker_volume_kms_key_id = local.volume_kms_key_id
+
   worker_cloud_init = [{ content_type = "text/cloud-config", content = yamlencode(local.cloud_init)}]         # Cloud init is different, depending if you are using Ubuntu or Oracle Linux nodes, see local.cloud_init variable
 
 

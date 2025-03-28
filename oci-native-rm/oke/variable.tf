@@ -45,3 +45,17 @@ variable "services_cidr" {
 variable "pods_cidr" {
   default = "10.244.0.0/16"
 }
+
+# SECURITY
+
+variable "oke_vault_compartment_id" {
+  default = null
+}
+
+variable "oke_vault_id" {
+  default = null
+}
+
+variable "cluster_kms_key_id" {
+  default = null
+}
