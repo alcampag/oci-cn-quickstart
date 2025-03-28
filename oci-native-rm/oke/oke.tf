@@ -1,3 +1,8 @@
+# NOTE: OKE often requires some policies to work with depending on the use case. You can find a complete list at this link:
+# https://github.com/oracle-devrel/technology-engineering/blob/main/app-dev/devops-and-containers/oke/oke-policies/policies.md
+
+
+
 locals {
   is_cp_subnet_private = data.oci_core_subnet.cp_subnet_data.prohibit_public_ip_on_vnic
   is_lb_subnet_private = data.oci_core_subnet.lb_subnet_data.prohibit_public_ip_on_vnic
