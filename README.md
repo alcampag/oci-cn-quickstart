@@ -22,8 +22,6 @@ This stack is used to create the initial network infrastructure for OKE. When co
 
 This stack is used to create the OKE control plane ONLY.
 
-NOTE: if you are planning to use Ubuntu nodes for the data plane, be sure to select v1.29.1 as OKE version, as currently it's the only version that is supporting Ubuntu nodes.
-
 [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/alcampag/oci-cn-quickstart/releases/download/v1.0.7/oke.zip)
 
 Also note that if the network infrastructure is located in a different compartment than the OKE cluster AND you are planning to use the OCI_VCN_NATIVE CNI,
