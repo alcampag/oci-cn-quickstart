@@ -84,54 +84,6 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress
 resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress_7" {
   direction                 = "INGRESS"
   network_security_group_id = oci_core_network_security_group.worker_nsg.id
-  protocol                  = "17"  # UDP
-  source_type = "NETWORK_SECURITY_GROUP"
-  source = oci_core_network_security_group.fss_nsg.id
-  stateless = false
-  description = "Allow UDP ingress to workers for NFS portmapper from FSS mounts"
-  udp_options {
-    source_port_range {
-      max = 111
-      min = 111
-    }
-  }
-}
-
-resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress_8" {
-  direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.worker_nsg.id
-  protocol                  = "6"
-  source_type = "NETWORK_SECURITY_GROUP"
-  source = oci_core_network_security_group.fss_nsg.id
-  stateless = false
-  description = "Allow TCP ingress to workers for NFS portmapper from FSS mounts"
-  tcp_options {
-    source_port_range {
-      max = 111
-      min = 111
-    }
-  }
-}
-
-resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress_9" {
-  direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.worker_nsg.id
-  protocol                  = "6"
-  source_type = "NETWORK_SECURITY_GROUP"
-  source = oci_core_network_security_group.fss_nsg.id
-  stateless = false
-  description = "Allow TCP ingress to workers for NFS from FSS mounts"
-  tcp_options {
-    source_port_range {
-      max = 2050
-      min = 2048
-    }
-  }
-}
-
-resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress_10" {
-  direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.worker_nsg.id
   protocol                  = "6"
   source_type = "CIDR_BLOCK"
   source = var.bastion_subnet_cidr
@@ -258,7 +210,7 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_
   stateless = false
   description = "Allow UDP egress from workers for NFS portmapper to FSS mounts"
   udp_options {
-    source_port_range {
+    destination_port_range {
       max = 111
       min = 111
     }
@@ -274,7 +226,7 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_
   stateless = false
   description = "Allow TCP egress from workers for NFS portmapper to FSS mounts"
   tcp_options {
-    source_port_range {
+    destination_port_range {
       max = 111
       min = 111
     }
@@ -290,7 +242,7 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_
   stateless = false
   description = "Allow TCP egress from workers for NFS to FSS mounts"
   tcp_options {
-    source_port_range {
+    destination_port_range {
       max = 2050
       min = 2048
     }
@@ -306,9 +258,25 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_
   stateless = false
   description = "Allow UDP egress from workers for NFS to FSS mounts"
   udp_options {
-    source_port_range {
+    destination_port_range {
       max = 2048
       min = 2048
+    }
+  }
+}
+
+resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_egress_13" {
+  direction                 = "EGRESS"
+  network_security_group_id = oci_core_network_security_group.worker_nsg.id
+  protocol                  = "6"
+  destination_type = "NETWORK_SECURITY_GROUP"
+  destination = oci_core_network_security_group.fss_nsg.id
+  stateless = false
+  description = "Allow TCP egress from workers for NFS to FSS mounts when using in-transit encryption"
+  tcp_options {
+    destination_port_range {
+      max = 2051
+      min = 2051
     }
   }
 }
