@@ -11,7 +11,7 @@ locals {
 
   runcmd_bootstrap_ubuntu = "oke bootstrap"
   runcmd_bootstrap_oracle_linux = "sudo /usr/libexec/oci-growfs -y"
-  kubelet_extra_args = "--register-with-taints=env=dev:NoSchedule,cluster=oke:ScheduleAnyway"
+  kubelet_extra_args = "--register-with-taints=env=dev:NoSchedule,cluster=oke:PreferNoSchedule"
 
   # UBUNTU NODES: modify this cloud init script
   cloud_init = {
