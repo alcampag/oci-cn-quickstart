@@ -116,9 +116,9 @@ module "oke" {
       node_cycling_max_unavailable = 1
       boot_volume_size = 150
       ignore_initial_pool_size = true       # If set to true, node pool size drift won't be accounted in Terraform, useful also if this pool is autoscaled by an external component or user
-      create = true                          # Set it to true so that the node pool is created
+      create = false                          # Set it to true so that the node pool is created
     }
-    np-taints = {
+    np-taints = {         # An example of a node pool using a custom cloud-init script to define taints at the node pool level
       shape = "VM.Standard.E4.Flex"        # No need to specify ocpus and memory if you are not using a Flex shape
       size = 1
       placement_ads = ["1"]                # As best practice, one node pool should be associated only to one specific AD
@@ -131,7 +131,7 @@ module "oke" {
       node_cycling_max_unavailable = 1
       boot_volume_size = 150
       ignore_initial_pool_size = true
-      create = true
+      create = false
     }
   }
 
