@@ -11,12 +11,20 @@ locals {
 
   runcmd_bootstrap_ubuntu = "oke bootstrap"
   runcmd_bootstrap_oracle_linux = "sudo /usr/libexec/oci-growfs -y"
+  kubelet_extra_args = "--register-with-taints=env=dev:NoSchedule,cluster=oke:ScheduleAnyway"
 
   # UBUNTU NODES: modify this cloud init script
   cloud_init = {
     runcmd = compact([
       local.runcmd_bootstrap_oracle_linux,        # Modify here depending on the OS selected for the worker nodes
     ])
+  }
+
+  cloud_init_with_taint = {
+    runcmd = [
+      "curl --fail -H \"Authorization: Bearer Oracle\" -L0 http://169.254.169.254/opc/v2/instance/metadata/oke_init_script | base64 --decode >/var/run/oke-init.sh",
+      "bash /var/run/oke-init.sh --kubelet-extra-args \"${local.kubelet_extra_args}\""
+    ]
   }
 }
 
@@ -109,6 +117,21 @@ module "oke" {
       boot_volume_size = 150
       ignore_initial_pool_size = true       # If set to true, node pool size drift won't be accounted in Terraform, useful also if this pool is autoscaled by an external component or user
       create = true                          # Set it to true so that the node pool is created
+    }
+    np-taints = {
+      shape = "VM.Standard.E4.Flex"        # No need to specify ocpus and memory if you are not using a Flex shape
+      size = 1
+      placement_ads = ["1"]                # As best practice, one node pool should be associated only to one specific AD
+      ocpus = 2
+      memory = 16
+      disable_default_cloud_init = true    # If you want to configure some kubelet arguments, make sure to disable the default cloud-init and remember to include it in your custom cloud-init
+      cloud_init = [{ content_type = "text/cloud-config", content = yamlencode(local.cloud_init_with_taint)}]
+      node_cycling_enabled = true
+      node_cycling_max_surge = 1
+      node_cycling_max_unavailable = 1
+      boot_volume_size = 150
+      ignore_initial_pool_size = true
+      create = true
     }
   }
 
