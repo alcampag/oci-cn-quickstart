@@ -23,6 +23,7 @@ locals {
   cloud_init_with_taint = {
     runcmd = [
       "curl --fail -H \"Authorization: Bearer Oracle\" -L0 http://169.254.169.254/opc/v2/instance/metadata/oke_init_script | base64 --decode >/var/run/oke-init.sh",
+      local.runcmd_bootstrap_oracle_linux,
       "bash /var/run/oke-init.sh --kubelet-extra-args \"${local.kubelet_extra_args}\""
     ]
   }
@@ -100,6 +101,9 @@ module "oke" {
   # Enable this to enable encryption of volumes with a key managed by you, in your OCI Vault
   #worker_volume_kms_key_id = local.volume_kms_key_id
 
+  # When using OCI_VCN_NATIVE_CNI, set the maximum number of pods for all nodes, must be between 1 and 110
+  #max_pods_per_node = 31
+
   worker_cloud_init = [{ content_type = "text/cloud-config", content = yamlencode(local.cloud_init)}]         # Cloud init is different, depending if you are using Ubuntu or Oracle Linux nodes, see local.cloud_init variable
 
 
@@ -115,7 +119,7 @@ module "oke" {
       node_cycling_max_surge = 1
       node_cycling_max_unavailable = 1
       boot_volume_size = 150
-      ignore_initial_pool_size = true       # If set to true, node pool size drift won't be accounted in Terraform, useful also if this pool is autoscaled by an external component or user
+      ignore_initial_pool_size = false       # If set to true, node pool size drift won't be accounted in Terraform, useful also if this pool is autoscaled by an external component or user
       create = false                          # Set it to true so that the node pool is created
     }
     np-taints = {         # An example of a node pool using a custom cloud-init script to define taints at the node pool level
