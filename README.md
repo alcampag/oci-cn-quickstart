@@ -42,7 +42,7 @@ As the data plane vastly depends on the particular use case, there is no stack f
 
 This option is most commonly used for general purpose CPU workloads.
 
-Although GPU workloads are supported too, the DCGM exporter to collect GPU metrics is still not available, so take this into account if you are planning to use Oracle Linux nodes and GPUs.
+Although GPU workloads are supported too, the Nvidia GPU Operator is not supported, so take this into account if you are planning to use Oracle Linux nodes and GPUs.
 
 #### Option 3.1.1: Create worker nodes manually through the OCI web console
 
