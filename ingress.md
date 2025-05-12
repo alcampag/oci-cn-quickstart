@@ -1,4 +1,4 @@
-# Ingress best practices in OKE
+# Ingress guide and best practices in OKE
 
 Configuring an Ingress is one of the first steps any engineer needs to understand when dealing with Kubernetes.
 
