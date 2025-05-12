@@ -2,6 +2,8 @@
 
 Configuring an Ingress is one of the first steps any engineer needs to understand when dealing with Kubernetes.
 
+A full list of all the annotations both for Load Balancers and Network Load Balancers can be found [here](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingloadbalancer_topic-Summaryofannotations.htm).
+
 There are some best practices and common tasks to perform, and as an example we will use Traefik OSS Helm chart, but you are free to use whatever ingress you like.
 
 ## Prerequisites: policies
