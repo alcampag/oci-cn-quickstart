@@ -52,38 +52,6 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker
   }
 }
 
-resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_https_ingress" {
-  direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
-  protocol                  = "6"
-  source_type = "CIDR_BLOCK"
-  source = "0.0.0.0/0"
-  stateless = true
-  description = "Allow https traffic - stateless Ingress"
-  tcp_options {
-    destination_port_range {
-      max = 443
-      min = 443
-    }
-  }
-}
-
-resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_https_egress" {
-  direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
-  protocol                  = "6"
-  destination_type = "CIDR_BLOCK"
-  destination = "0.0.0.0/0"
-  stateless = true
-  description = "Allow https traffic - stateless egress"
-  tcp_options {
-    source_port_range {
-      max = 443
-      min = 443
-    }
-  }
-}
-
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_egress" {
   direction                 = "EGRESS"
   network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
@@ -104,38 +72,6 @@ resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_pods_i
   stateless = true
   description = "LB to pods, OCI Native Ingress - stateless ingress"
   count = local.is_npn ? 1 : 0
-}
-
-resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_http_ingress" {
-  direction                 = "INGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
-  protocol                  = "6"
-  source_type = "CIDR_BLOCK"
-  source = "0.0.0.0/0"
-  stateless = true
-  description = "Allow http traffic - stateless Ingress"
-  tcp_options {
-    destination_port_range {
-      max = 80
-      min = 80
-    }
-  }
-}
-
-resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_http_egress" {
-  direction                 = "EGRESS"
-  network_security_group_id = oci_core_network_security_group.oke_lb_nsg.id
-  protocol                  = "6"
-  destination_type = "CIDR_BLOCK"
-  destination = "0.0.0.0/0"
-  stateless = true
-  description = "Allow http traffic - stateless egress"
-  tcp_options {
-    source_port_range {
-      max = 80
-      min = 80
-    }
-  }
 }
 
 resource "oci_core_network_security_group_security_rule" "oke_lb_nsg_rule_worker_discovery_egress" {
