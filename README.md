@@ -75,6 +75,7 @@ If you are looking to provision an OKE cluster for RDMA and GPUs using this stac
 # What to do next?
 
 Provisioning an OKE cluster is just the first step, be sure to also check out these guides to learn how to configure it:
+* [OKE policies](https://github.com/oracle-devrel/technology-engineering/blob/main/app-dev/devops-and-containers/oke/oke-policies/policies.md)
 * [GitOps with ArgoCD](https://github.com/alcampag/oke-gitops)
 * [Ingress guide](ingress.md)
 

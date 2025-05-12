@@ -13,6 +13,7 @@ ALLOW any-user to manage vcns in compartment <network-compartment-name> where re
 ALLOW any-user to manage virtual-network-family in compartment <network-compartment-name> where request.principal.type = 'cluster'
 ```
 Note that these policies are necessary even if the network compartment and the cluster compartment are the same!
+
 These policies can also be further restricted by specifying the OKE cluster id.
 
 ## Configuring the Service of type LoadBalancer
@@ -219,7 +220,33 @@ ports:
 ```
 Where 10.0.0.0/16 is the CIDR block of the VCN where the OKE cluster has been provisioned and where the Load Balancer is located.
 
-## Change the default Load Balancer policy
+## Select only the necessary worker nodes to be included in the Load Balancer
+
+By default, OKE will include all the worker nodes in a cluster as backend set of the Load Balancer. If nodes increase a lot, having many nodes in the backend set
+may slow down the Load Balancer.
+We can restrict the nodes to be included in the backend set by using labels and the annotation **oci.oraclecloud.com/node-label-selector**:
+```yaml
+service:
+  type: LoadBalancer
+  annotations:
+    oci.oraclecloud.com/load-balancer-type: "lb"
+    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100"
+    oci.oraclecloud.com/oci-network-security-groups: "ocid1.networksecuritygroup.oc1...." # It is the oke-lb-nsg OCID
+    oci.oraclecloud.com/security-rule-management-mode: "NSG"
+    service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "TCP"  # Proxy Protocol only works with a TCP listener
+    service.beta.kubernetes.io/oci-load-balancer-connection-proxy-protocol-version: "2" # Enable Proxy Protocol v2
+    oci.oraclecloud.com/node-label-selector: "env=test"
+  spec:
+    externalTrafficPolicy: "Local"
+    loadBalancerIP: "121.127.6.12"
+    loadBalancerSourceRanges:
+      - "10.1.0.0/16"
+```
+See the [documentation](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengconfiguringloadbalancersnetworkloadbalancers-subtopic.htm#contengcreatingloadbalancer_topic-Selecting_worker_nodes_to_include_in_backend_sets) for more examples.
+
+## Change the default Load Balancer policy if needed
 
 The default Load Balancer policy is ROUND_ROBIN. If your applications require long connection times, better change the policy to LEAST_CONNECTIONS:
 ```yaml
@@ -234,6 +261,7 @@ service:
     oci.oraclecloud.com/security-rule-management-mode: "NSG"
     service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "TCP"  # Proxy Protocol only works with a TCP listener
     service.beta.kubernetes.io/oci-load-balancer-connection-proxy-protocol-version: "2" # Enable Proxy Protocol v2
+    oci.oraclecloud.com/node-label-selector: "env=test"
     oci.oraclecloud.com/loadbalancer-policy: "LEAST_CONNECTIONS"
   spec:
     externalTrafficPolicy: "Local"
@@ -259,6 +287,7 @@ service:
     oci.oraclecloud.com/security-rule-management-mode: "NSG"
     service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "TCP"  # Proxy Protocol only works with a TCP listener
     service.beta.kubernetes.io/oci-load-balancer-connection-proxy-protocol-version: "2" # Enable Proxy Protocol v2
+    oci.oraclecloud.com/node-label-selector: "env=test"
     service.beta.kubernetes.io/oci-load-balancer-connection-idle-timeout: "60"
   spec:
     externalTrafficPolicy: "Local"
@@ -284,6 +313,7 @@ service:
     oci.oraclecloud.com/security-rule-management-mode: "NSG"
     service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "TCP"  # Proxy Protocol only works with a TCP listener
     service.beta.kubernetes.io/oci-load-balancer-connection-proxy-protocol-version: "2" # Enable Proxy Protocol v2
+    oci.oraclecloud.com/node-label-selector: "env=test"
     service.beta.kubernetes.io/oci-load-balancer-connection-idle-timeout: "60"
     service.beta.kubernetes.io/oci-load-balancer-health-check-interval: "3000"
     service.beta.kubernetes.io/oci-load-balancer-health-check-timeout: "2000"
@@ -311,6 +341,7 @@ service:
     oci.oraclecloud.com/security-rule-management-mode: "NSG"
     service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "TCP"  # Proxy Protocol only works with a TCP listener
     service.beta.kubernetes.io/oci-load-balancer-connection-proxy-protocol-version: "2" # Enable Proxy Protocol v2
+    oci.oraclecloud.com/node-label-selector: "env=test"
     service.beta.kubernetes.io/oci-load-balancer-connection-idle-timeout: "60"
     service.beta.kubernetes.io/oci-load-balancer-health-check-interval: "3000"
     service.beta.kubernetes.io/oci-load-balancer-health-check-timeout: "2000"
@@ -332,6 +363,20 @@ service:
     loadBalancerSourceRanges:
       - "10.1.0.0/16"
 ```
+
+## Additional best practices
+
+If you expect to have multiple environments in the same OKE cluster, it's better to create multiple IngressClasses for every environment, each with its own ingress controller and Load Balancer.
+
+To better manage costs, do not forget to add cost-tracking tags to the Load Balancer! See [here](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengtaggingclusterresources_tagging-oke-resources_load-balancer-tags.htm#contengtaggingclusterresources_tagging_oke_resources_load_balancer_tags) for more information.
+
+NOTE: Remember that to apply tags additional policies may be needed, see [here](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengtaggingclusterresources_iam-tag-namespace-policy.htm#contengtaggingclusterresources_iam-tag-namespace-policy).
+
+This guide shows how to configure an ingress controller with a Load Balancer configured with TLS passthrough. SSL/TLS termination will happen at the Ingress level.
+
+Usually, this is preferable as the Ingress controller is directly integrated with cert-manager and is capable to handle multiple certificates.
+
+If you only have one certificate, you can also terminate TLS at the Load Balancer level and there are some additional [annotations](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingloadbalancers-subtopic.htm#creatinglbhttps).
 
 ## Enable API Gateway features (requires an enterprise license)
 
