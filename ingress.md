@@ -366,6 +366,46 @@ service:
       - "10.1.0.0/16"
 ```
 
+## Provision the Load Balancer in a different subnet
+
+You can specify a different subnet where to provision the OCI Load Balancer. This is very useful for hub/spoke architectures.
+
+```yaml
+service:
+  type: LoadBalancer
+  annotations:
+    oci.oraclecloud.com/load-balancer-type: "lb"
+    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100"
+    oci.oraclecloud.com/oci-network-security-groups: "ocid1.networksecuritygroup.oc1...." # It is the oke-lb-nsg OCID
+    oci.oraclecloud.com/security-rule-management-mode: "NSG"
+    service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "TCP"  # Proxy Protocol only works with a TCP listener
+    service.beta.kubernetes.io/oci-load-balancer-connection-proxy-protocol-version: "2" # Enable Proxy Protocol v2
+    oci.oraclecloud.com/node-label-selector: "env=test"
+    service.beta.kubernetes.io/oci-load-balancer-connection-idle-timeout: "60"
+    service.beta.kubernetes.io/oci-load-balancer-health-check-interval: "3000"
+    service.beta.kubernetes.io/oci-load-balancer-health-check-timeout: "2000"
+    service.beta.kubernetes.io/oci-load-balancer-health-check-retries: "3"
+    oci.oraclecloud.com/oci-load-balancer-rule-sets: |
+      {
+        "header_size": {
+          "items": [
+            {
+              "action": "HTTP_HEADER",
+              "httpLargeHeaderSizeInKB": 16
+            }
+          ]
+        }
+      }
+    service.beta.kubernetes.io/oci-load-balancer-subnet1: "ocid1.subnet.oc1...."
+  spec:
+    externalTrafficPolicy: "Local"
+    loadBalancerIP: "121.127.6.12"
+    loadBalancerSourceRanges:
+      - "10.1.0.0/16"
+```
+
 ## Additional best practices
 
 If you expect to have multiple environments in the same OKE cluster, it's better to create multiple IngressClasses for every environment, each with its own ingress controller and Load Balancer.
