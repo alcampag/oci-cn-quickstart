@@ -106,6 +106,9 @@ module "oke" {
 
   worker_cloud_init = [{ content_type = "text/cloud-config", content = yamlencode(local.cloud_init)}]         # Cloud init is different, depending if you are using Ubuntu or Oracle Linux nodes, see local.cloud_init variable
 
+  workers_freeform_tags = {
+    "cluster-name" = "oke-poc"
+  }
 
   worker_pools = {
     np1 = {

@@ -90,7 +90,7 @@ resource "oci_core_network_security_group_security_rule" "oke_worker_nsg_ingress
   stateless = false
   description = "Allow SSH access from bastion subnet"
   tcp_options {
-    source_port_range {
+    destination_port_range {
       max = 22
       min = 22
     }

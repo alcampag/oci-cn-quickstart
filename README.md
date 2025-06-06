@@ -1,3 +1,9 @@
+# The repository has moved!
+
+To find the latest version of the repository, go [HERE](https://github.com/oracle-devrel/technology-engineering/tree/main/app-dev/devops-and-containers/oke/oke-rm)
+
+
+
 # OKE Quickstart
 
 This repository was created with the intent of facilitating users with the creation of an OKE cluster from scratch.
